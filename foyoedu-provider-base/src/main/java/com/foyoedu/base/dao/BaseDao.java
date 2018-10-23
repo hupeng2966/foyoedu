@@ -1,4 +1,4 @@
-package com.foyoedu.dao;
+package com.foyoedu.base.dao;
 
 import org.apache.ibatis.annotations.*;
 import java.util.List;
@@ -9,9 +9,7 @@ public interface BaseDao {
     @Select("select * from ${table} where ${pk_id}=#{id}")
     public Map<String, Object> findById(@Param("id") Long id, @Param("table") String table, @Param("pk_id") String pk_id);
 
-    @Select("select * from ${table} where ${pk_id} >=(" +
-            "select ${pk_id} from ${table} ${filterCondition} ${sortCondition} limit #{pageNo},1" +
-            ") limit #{pageSize}")
+    @Select("select * from ${table} ${filterCondition} ${sortCondition} limit #{pageNo},#{pageSize}")
     public List<Map<String, Object>> findPage(@Param("pageNo") Integer pageNo, @Param("pageSize") Integer pageSize, @Param("table") String table, @Param("pk_id") String pk_id, @Param("filterCondition") String filterCondition, @Param("sortCondition") String sortCondition);
 
     @Select("select count(*) from ${table} ${filterCondition}")

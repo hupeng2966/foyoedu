@@ -1,4 +1,4 @@
-package com.foyoedu.config;
+package com.foyoedu.base.config;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -26,7 +26,7 @@ public class WebLogAspect {
 
     ThreadLocal<Long> startTime = new ThreadLocal<>();
 
-    @Pointcut("execution(public * com.foyoedu..*.*Controller(..))")
+    @Pointcut("execution(public * com.foyoedu..*.*controller(..))")
     public void webLog(){}
 
     @Before("webLog()")

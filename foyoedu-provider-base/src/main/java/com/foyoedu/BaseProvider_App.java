@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(value = "com.foyoedu.dao")
+@MapperScan(value = "com.foyoedu.base.dao")
 /*@EnableEurekaClient //本服务启动后会自动注册进eureka服务中
 @EnableDiscoveryClient //服务发现*/
 public class BaseProvider_App {

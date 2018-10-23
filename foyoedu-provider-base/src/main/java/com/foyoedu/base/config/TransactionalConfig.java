@@ -1,4 +1,4 @@
-package com.foyoedu.config;
+package com.foyoedu.base.config;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.aop.Advisor;
@@ -17,7 +17,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @Configuration
 public class TransactionalConfig {
 
-    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.foyoedu.controller..*.*(..))";
+    private static final String AOP_POINTCUT_EXPRESSION = "execution(* com.foyoedu.base.controller..*.*(..))";
     @Autowired
     private PlatformTransactionManager transactionManager;
 

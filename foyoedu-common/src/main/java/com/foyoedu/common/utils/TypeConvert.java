@@ -1,4 +1,4 @@
-package com.foyoedu.utils;
+package com.foyoedu.common.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -21,7 +21,7 @@ public class TypeConvert<E> {
         this.clazz = clazz;
     }
 
-    public List<E> MapToPojo(List<Map<String, Object>> objs) throws Exception {
+    public List<E> MapToList(List<Map<String, Object>> objs) throws Exception {
         List<E> list = new ArrayList<E>();
         for (Map<String, Object> obj:objs) {
             E o = MapToPojo(obj);
