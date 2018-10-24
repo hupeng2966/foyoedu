@@ -61,4 +61,9 @@ public class DeptController {
         String filterCondition = "deptno=" + dept.getDeptno();
         return deptService.update(setCondition, filterCondition);
     }
+
+    @GetMapping(value = "/dept/hello")
+    public String hello() {
+        return "hello8001";
+    }
 }

@@ -3,7 +3,7 @@ server:
 
 mybatis:
   config-location: classpath:mybatis/mybatis.cfg.xml        # mybatis配置文件所在路径
-  type-aliases-package: com.foyoedu.common.pojo    # 所有Entity别名类所在包
+  type-aliases-package: com.foyoedu.common.pojo    # 所有pojo别名类所在包
 #  mapper-locations:
 #  - classpath:mybatis/mapper/**/*.xml                       # mapper映射文件
 
@@ -21,11 +21,25 @@ spring:
       initial-size: 10                                       # 初始化连接数
       max-total: 100                                          # 最大连接数
       max-wait-millis: 30000                                  # 等待连接获取的最大超时时间
-
   http:
     encoding:
       charset: utf-8
       enabled: true
       force: true                                           #server.tomcat.uri-encoding=UTF-8
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://www.eureka.com:7001/eureka/
+      #defaultZone: http://eureka7001.com:7001/eureka/,http://eureka7002.com:7002/eureka/,http://eureka7003.com:7003/eureka/
+  instance:
+    instance-id: ${spring.application.name}-${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址
+
+info:
+  app.name: foyoedu
+  company.name: www.foyoedu.com
+  build.artifactId: ${project.artifactId}
+  build.version: ${project.version}
 
 

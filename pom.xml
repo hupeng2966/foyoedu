@@ -12,6 +12,9 @@
         <module>foyoedu-provider-base</module>
         <module>foyoedu-provider-standart</module>
         <module>foyoedu-consumer</module>
+        <module>foyoedu-eureka</module>
+        <module>foyoedu-provider-base2</module>
+        <module>foyoedu-provider-standart2</module>
     </modules>
     <packaging>pom</packaging>
 

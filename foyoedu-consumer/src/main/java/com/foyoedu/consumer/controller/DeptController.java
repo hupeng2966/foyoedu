@@ -11,8 +11,8 @@ import java.util.Map;
 
 @RestController
 public class DeptController {
-    private static final String REST_URL_PREFIX = "http://localhost:8001";
-    //private static final String REST_URL_PREFIX = "http://MICROSERVICECLOUD-DEPT";
+    //private static final String REST_URL_PREFIX = "http://localhost:8001";
+    private static final String REST_URL_PREFIX = "http://FOYOEDU-PROVIDER-BASE";
 
     /**
      * 使用 使用restTemplate访问restful接口非常的简单粗暴无脑。 (url, requestMap,
@@ -31,15 +31,16 @@ public class DeptController {
         return restTemplate.getForObject(REST_URL_PREFIX + "/dept/get/" + id, Dept.class);
     }
 
-
     //要求前端必须content-type="application/json"
     //请求体必须json数据
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/dept/list")
     public Map<String, Object> list(@RequestBody Map<String, String> map) {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        for (Map.Entry<String, String> entry : map.entrySet()){
-            paramMap.add(entry.getKey(), entry.getValue());
+        if(map.size() > 0){
+            for (Map.Entry<String, String> entry : map.entrySet()){
+                paramMap.add(entry.getKey(), entry.getValue());
+            }
         }
         return restTemplate.postForObject(REST_URL_PREFIX + "/dept/list/test", paramMap, Map.class);
     }
@@ -59,5 +60,13 @@ public class DeptController {
         return restTemplate.postForObject(REST_URL_PREFIX + "/dept/put/test", dept, boolean.class);
     }
 
+    @GetMapping(value = "/hello")
+    public String hello() {
+        return restTemplate.getForObject("http://FOYOEDU-PROVIDER-STANDART/dept/hello", String.class);
+    }
 
+    @GetMapping(value = "/dept/hello")
+    public String hello2() {
+        return restTemplate.getForObject(REST_URL_PREFIX + "/dept/hello", String.class);
+    }
 }
