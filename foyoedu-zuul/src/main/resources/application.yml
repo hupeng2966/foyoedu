@@ -1,0 +1,34 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: foyoedu-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://www.eureka.com:7001/eureka
+  instance:
+    instance-id: ${spring.application.name}-${server.port}
+    prefer-ip-address: true
+
+zuul:
+  #ignored-services: FOYOEDU-PROVIDER-BASE
+  #prefix: /foyoedu
+  ignored-services: "*"
+  routes:
+    FOYOEDU-PROVIDER-BASE: /base/**
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: foyoedu
+    password: foyoedu
+
+info:
+  app.name: foyoedu
+  company.name: www.foyoedu.com
+  build.artifactId: ${project.artifactId}
+  build.version: ${project.version}

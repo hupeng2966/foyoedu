@@ -1,6 +1,7 @@
 package com.foyoedu.consumer.config;
 
 import com.netflix.loadbalancer.*;
+import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -22,6 +23,7 @@ public class ConfigBeans {
 //        return new RestTemplate();
 //    }
 
+    //Ribbon负载均衡算法
     @Bean
     public IRule myRule()
     {
@@ -46,4 +48,9 @@ public class ConfigBeans {
         };
     }
 
+    //zuul访问帐号及密码设置
+    @Bean
+    public BasicAuthRequestInterceptor getBasicAuthRequestInterceptor() {
+        return new BasicAuthRequestInterceptor("foyoedu","foyoedu");
+    }
 }

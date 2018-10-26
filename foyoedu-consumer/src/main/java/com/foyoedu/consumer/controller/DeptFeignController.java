@@ -24,7 +24,6 @@ public class DeptFeignController {
 
     @GetMapping(value = "/dept/get/{id}")
     public FoyoResult get(@PathVariable("id") Long id) {
-
         return service.getDept(id);
     }
 

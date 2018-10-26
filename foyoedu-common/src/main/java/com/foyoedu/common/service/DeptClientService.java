@@ -8,8 +8,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
-@FeignClient(value = "FOYOEDU-PROVIDER-BASE", fallbackFactory = DeptClientServiceFactory.class)
+//@FeignClient(value = "FOYOEDU-PROVIDER-BASE", fallbackFactory = DeptClientServiceFactory.class)
 //@FeignClient(value = "FOYOEDU-PROVIDER-BASE")
+@FeignClient(value = "FOYOEDU-ZUUL", fallbackFactory = DeptClientServiceFactory.class)
+@RequestMapping(value = "/base")
 public interface DeptClientService {
 
     @PostMapping(value = "/dept/add")
