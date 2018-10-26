@@ -2,15 +2,17 @@ package com.foyoedu.base.utils;
 
 import com.foyoedu.base.service.BaseService;
 import com.foyoedu.common.pojo.Dept;
+import com.foyoedu.common.pojo.PageResult;
+import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FoyoUtils {
+public class Utils {
 
-    public static Map<String, Object> pageData(MultiValueMap<String, String> mulMap, BaseService obj, String filterCondition, String sortCondition)
+    public static PageResult pageData(MultiValueMap<String, String> mulMap, BaseService obj, String filterCondition, String sortCondition)
             throws Exception{
         Integer pageNo = 1;
         Integer pageSize = Integer.MAX_VALUE;
@@ -19,14 +21,11 @@ public class FoyoUtils {
             pageSize = Integer.parseInt(mulMap.get("pageSize").get(0));
         }
 
-        Map<String, Object> map = new HashMap<>();
         Integer total = obj.totalCount(filterCondition);
-        map.put("total", total);
+        List<Dept> list = null;
         if(total > 0) {
-            List<Dept> list = obj.list(pageNo, pageSize, filterCondition, sortCondition);
-            map.put("data", list);
+            list = obj.list(pageNo, pageSize, filterCondition, sortCondition);
         }
-
-        return map;
+        return FoyoUtils.pageResult(total, list);
     }
 }

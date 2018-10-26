@@ -1,7 +1,8 @@
 package com.foyoedu.consumer.controller;
 
 import com.foyoedu.common.pojo.Dept;
-import com.foyoedu.common.service.DetpClientService;
+import com.foyoedu.common.pojo.FoyoResult;
+import com.foyoedu.common.service.DeptClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -14,15 +15,16 @@ import java.util.Map;
 public class DeptFeignController {
 
     @Autowired
-    private DetpClientService service;
+    private DeptClientService service;
 
     @PostMapping(value = "/dept/add")
-    public Long add(Dept dept) {
+    public FoyoResult add(Dept dept) {
         return service.addDept(dept);
     }
 
     @GetMapping(value = "/dept/get/{id}")
-    public Dept get(@PathVariable("id") Long id) {
+    public FoyoResult get(@PathVariable("id") Long id) {
+
         return service.getDept(id);
     }
 
@@ -30,7 +32,7 @@ public class DeptFeignController {
     //请求体必须json数据
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/dept/list")
-    public Map<String, Object> list(@RequestBody Map<String, String> map) {
+    public FoyoResult list(@RequestBody Map<String, String> map) {
         MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
         if(map.size() > 0){
             for (Map.Entry<String, String> entry : map.entrySet()){
@@ -41,27 +43,27 @@ public class DeptFeignController {
     }
 
     @PostMapping(value = "/dept/delete")
-    public boolean deleteDeptById(@RequestParam("id") Long id) {
+    public FoyoResult deleteDeptById(@RequestParam("id") Long id) {
         return service.deleteDeptById(id);
     }
 
     @PostMapping(value = "/dept/delete/test")
-    public boolean delete(Dept dept) {
+    public FoyoResult delete(Dept dept) {
         return service.delete(dept);
     }
 
     @PostMapping(value = "/dept/put/test")
-    public boolean updateDept(Dept dept) {
+    public FoyoResult updateDept(Dept dept) {
         return service.updateDept(dept);
     }
 
     @GetMapping(value = "/hello")
-    public String hello() {
+    public FoyoResult hello(){
         return service.hello();
     }
 
 //    @GetMapping(value = "/dept/hello")
-//    public String hello2() {
+//    public FoyoResult hello2() {
 //        return restTemplate.getForObject(REST_URL_PREFIX + "/dept/hello", String.class);
 //    }
 }

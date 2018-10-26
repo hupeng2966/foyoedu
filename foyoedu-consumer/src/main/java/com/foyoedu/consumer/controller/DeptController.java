@@ -1,16 +1,16 @@
 package com.foyoedu.consumer.controller;
-
-import com.foyoedu.common.pojo.Dept;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
-
+//
+//import com.foyoedu.common.pojo.Dept;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.util.LinkedMultiValueMap;
+//import org.springframework.util.MultiValueMap;
+//import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.client.RestTemplate;
+//
+//import java.util.Map;
+//
 //@RestController
-//public class DeptController {
+public class DeptController {
 //    //private static final String REST_URL_PREFIX = "http://localhost:8001";
 //    private static final String REST_URL_PREFIX = "http://FOYOEDU-PROVIDER-BASE";
 //
@@ -68,5 +68,5 @@ import java.util.Map;
 //    @GetMapping(value = "/dept/hello")
 //    public String hello2() {
 //        return restTemplate.getForObject(REST_URL_PREFIX + "/dept/hello", String.class);
-//    }
+    }
 //}
