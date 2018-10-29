@@ -8,15 +8,13 @@ import java.security.PublicKey;
 public class FoyoUtils {
 
     public static FoyoResult errorMessage(Throwable throwable) {
-        return new FoyoResult(throwable.getMessage());
+        String msg = throwable.getMessage();
+        Integer status = Integer.parseInt(msg.split(" ")[1]);
+        return new FoyoResult(status, throwable.getMessage());
     }
 
     public static FoyoResult ok(Object data) {
         return new FoyoResult(data);
-    }
-
-    public static FoyoResult ok() {
-        return new FoyoResult(null);
     }
 
     public static PageResult pageResult(Integer total, Object data) {

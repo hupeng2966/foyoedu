@@ -16,6 +16,7 @@
         <module>foyoedu-provider-base2</module>
         <module>foyoedu-provider-standart2</module>
         <module>foyoedu-zuul</module>
+        <module>foyoedu-config</module>
     </modules>
     <packaging>pom</packaging>
 

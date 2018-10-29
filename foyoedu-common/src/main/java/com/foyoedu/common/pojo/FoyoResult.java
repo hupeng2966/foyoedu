@@ -24,8 +24,8 @@ public class FoyoResult implements Serializable {
         this.data = data;
     }
 
-    public FoyoResult(String errMsg) {
-        this.status = 500;
+    public FoyoResult(Integer status, String errMsg) {
+        this.status = status;
         this.errMsg = errMsg;
     }
 
