@@ -3,6 +3,8 @@ package com.foyoedu.consumer.controller;
 import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.DeptClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

@@ -1,9 +1,9 @@
-spring:
-  cloud:
-    config:
-      name: foyoedu-consumer-config #需要从github上读取的资源名称，注意没有yml后缀名
-      #profile配置是什么就取什么配置dev or test
-      profile: dev
-      #profile: test
-      label: master
-      uri: http://config.foyoedu.com:3344  #SpringCloudConfig获取的服务地址
+#spring:
+#  cloud:
+#    config:
+#      name: foyoedu-consumer-config #需要从github上读取的资源名称，注意没有yml后缀名
+#      #profile配置是什么就取什么配置dev or test
+#      profile: dev
+#      #profile: test
+#      label: master
+#      uri: http://config.foyoedu.com:3344  #SpringCloudConfig获取的服务地址
