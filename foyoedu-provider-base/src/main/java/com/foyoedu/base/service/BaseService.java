@@ -4,17 +4,17 @@ import java.util.List;
 
 public interface BaseService<E> {
 
-    public boolean add(E obj, String insertColumns, String values) throws Exception;
+    public boolean add(E obj, String insertColumns, String values) throws Throwable;
 
-    public E get(Long id) throws Exception;
+    public E getById(Long id) throws Throwable;
 
     public boolean deleteById(Long id);
 
-    public boolean delete(String filterCondition) throws Exception;;
+    public boolean delete(String filterCondition) throws Throwable;
 
-    public List<E> list(Integer pageNo, Integer pageSize, String sortCondition, String filterCondition) throws Exception;
+    public List<E> list(Integer pageNo, Integer pageSize, String sortCondition, String filterCondition) throws Throwable;
 
-    public boolean update(String setColumns, String filterCondition) throws Exception;
+    public boolean update(String setColumns, String filterCondition) throws Throwable;
 
-    public Integer totalCount(String filterCondition) throws Exception;
+    public Integer totalCount(String filterCondition) throws Throwable;
 }

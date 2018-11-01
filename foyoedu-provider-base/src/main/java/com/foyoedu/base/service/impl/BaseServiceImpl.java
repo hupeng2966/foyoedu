@@ -3,7 +3,8 @@ package com.foyoedu.base.service.impl;
 import com.foyoedu.common.utils.SqlUtils;
 import com.foyoedu.base.dao.BaseDao;
 import com.foyoedu.base.service.BaseService;
-import com.foyoedu.common.utils.TypeConvert;
+import com.foyoedu.common.utils.MapUtils;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
@@ -11,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
 public class BaseServiceImpl<E> implements BaseService<E> {
 
     private String TBALENAME;
     private String PK_ID;
     private Class<?> clazz;
+
     @Autowired
     private BaseDao dao;
 
@@ -25,41 +28,41 @@ public class BaseServiceImpl<E> implements BaseService<E> {
         this.clazz = clazz;
     }
 
-    public E get(Long id) throws Exception {
+    public E getById(Long id) throws Exception {
         Map<String, Object> map = dao.findById(id, TBALENAME, PK_ID);
-        TypeConvert<E> typeConvert = new TypeConvert<E>(clazz);
-        return typeConvert.MapToPojo(map);
+        MapUtils<E> mapUtils = new MapUtils<E>(clazz);
+        return mapUtils.MapToPojo(map);
     }
 
     public boolean deleteById(Long id) {
         return dao.deleteById(id, TBALENAME, PK_ID);
     }
 
-    public boolean delete(String filterCondition) throws Exception {
+    public boolean delete(String filterCondition) throws Throwable {
         if (SqlUtils.sqlValidate(filterCondition)) {
             throw new Exception("SQL参数中含有非法字符");
         }
         return dao.delete(TBALENAME, filterCondition);
     }
 
-    public List<E> list(Integer pageNo, Integer pageSize, String filterCondition, String sortCondition) throws Exception {
+    public List<E> list(Integer pageNo, Integer pageSize, String filterCondition, String sortCondition) throws Throwable {
         if (SqlUtils.sqlValidate(filterCondition) || SqlUtils.sqlValidate(sortCondition)) {
             throw new Exception("SQL参数中含有非法字符");
         }
 
         List<Map<String, Object>> maps = dao.findPage((pageNo - 1) * pageSize, pageSize, TBALENAME, PK_ID, filterCondition, sortCondition);
-        TypeConvert<E> typeConvert = new TypeConvert<E>(clazz);
-        return typeConvert.MapToList(maps);
+        MapUtils<E> mapUtils = new MapUtils<E>(clazz);
+        return mapUtils.MapToList(maps);
     }
 
-    public boolean update(String setColumns, String filterCondition) throws Exception {
+    public boolean update(String setColumns, String filterCondition) throws Throwable {
         if (SqlUtils.sqlValidate(filterCondition)) {
             throw new Exception("SQL参数中含有非法字符");
         }
         return dao.update(TBALENAME, setColumns, filterCondition);
     }
 
-    public boolean add(E obj, String inserColumns, String values) throws Exception {
+    public boolean add(E obj, String inserColumns, String values) throws Throwable {
         if (SqlUtils.sqlValidate(inserColumns) || SqlUtils.sqlValidate(values)) {
             throw new Exception("SQL参数中含有非法字符");
         }
@@ -74,7 +77,7 @@ public class BaseServiceImpl<E> implements BaseService<E> {
         return b;
     }
 
-    public Integer totalCount(String filterConditon) throws Exception {
+    public Integer totalCount(String filterConditon) throws Throwable {
         if (SqlUtils.sqlValidate(filterConditon)) {
             throw new Exception("SQL参数中含有非法字符");
         }

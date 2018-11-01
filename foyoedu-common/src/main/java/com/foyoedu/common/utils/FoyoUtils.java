@@ -16,11 +16,15 @@ public class FoyoUtils {
         String msg = throwable.getMessage();
         log.error(msg);
         Integer status = Integer.parseInt(msg.split(" ")[1]);
-        return new FoyoResult(status, throwable.getMessage());
+        return error(status, throwable.getMessage());
     }
 
     public static FoyoResult ok(Object data) {
         return new FoyoResult(data);
+    }
+
+    public static FoyoResult error(Integer status, String errMsg) {
+        return  new FoyoResult(status, errMsg);
     }
 
     public static PageResult pageResult(Integer total, Object data) {

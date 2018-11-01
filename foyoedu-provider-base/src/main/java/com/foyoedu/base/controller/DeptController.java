@@ -1,6 +1,6 @@
 package com.foyoedu.base.controller;
 
-import com.foyoedu.base.utils.Utils;
+import com.foyoedu.base.service.impl.BaseServiceImpl;
 import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.base.service.DeptService;
 import com.foyoedu.common.pojo.FoyoResult;
@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @Accessors(chain=true)
 public class DeptController {
@@ -20,30 +18,19 @@ public class DeptController {
     private DeptService deptService;
 
     @PostMapping(value = "/dept/add")
-    public FoyoResult addDept(@RequestBody Dept dept) throws Exception {
-        String insertColumn = "dname,db_source";
-        String values = "'" + dept.getDname().replaceAll("'","''") + "',DATABASE()";
-        deptService.add(dept, insertColumn, values);
+    public FoyoResult addDept(@RequestBody Dept dept) throws Throwable {
+        deptService.addDept(dept);
         return FoyoUtils.ok(dept.getDeptno());
     }
 
     @GetMapping(value = "/dept/get/{id}")
-    public FoyoResult getDept(@PathVariable("id") Long id) throws Exception {
-        return FoyoUtils.ok(deptService.get(id));
+    public FoyoResult getDept(@PathVariable("id") Long id) throws Throwable {
+        return FoyoUtils.ok(deptService.getById(id));
     }
 
     @PostMapping(value = "/dept/list/test")
-    public FoyoResult listDeptTest(@RequestBody MultiValueMap<String, String> paramMap) throws Exception {
-        String filterCondition = "";
-        String sortCondition = "";
-        if (paramMap.containsKey("deptno") && paramMap.get("deptno").get(0).isEmpty()) {
-            filterCondition = "where deptno >" + Integer.parseInt(paramMap.get("deptno").get(0));
-        }
-        if (paramMap.containsKey("sort") && paramMap.get("sort").get(0).isEmpty()) {
-            sortCondition = "order by " + paramMap.get("sort").get(0);
-        }
-
-        return FoyoUtils.ok(Utils.pageData(paramMap, deptService, filterCondition, sortCondition));
+    public FoyoResult listDeptTest(@RequestBody MultiValueMap<String, String> paramMap) throws Throwable {
+        return FoyoUtils.ok(deptService.listDeptTest(paramMap));
     }
 
     @GetMapping(value = "/dept/delete/{id}")
@@ -52,16 +39,13 @@ public class DeptController {
     }
 
     @PostMapping(value = "/dept/delete/test")
-    public FoyoResult delete(@RequestBody Dept dept) throws Exception {
-        String filterCondition = "dname='" + dept.getDname().replaceAll("'","''") + "'";
-        return FoyoUtils.ok(deptService.delete(filterCondition));
+    public FoyoResult delete(@RequestBody Dept dept) throws Throwable {
+        return FoyoUtils.ok(deptService.deleteDept(dept));
     }
 
     @PostMapping(value = "/dept/put/test")
-    public FoyoResult updateDept(@RequestBody Dept dept) throws Exception {
-        String setCondition = "dname='" + dept.getDname().replaceAll("'","''") + "',db_source=DATABASE()";
-        String filterCondition = "deptno=" + dept.getDeptno();
-        return FoyoUtils.ok(deptService.update(setCondition, filterCondition));
+    public FoyoResult updateDept(@RequestBody Dept dept) throws Throwable {
+        return FoyoUtils.ok(deptService.updateDept(dept));
     }
 
     @GetMapping(value = "/dept/hello")

@@ -13,7 +13,7 @@ import java.util.Map;
 public class Utils {
 
     public static PageResult pageData(MultiValueMap<String, String> mulMap, BaseService obj, String filterCondition, String sortCondition)
-            throws Exception{
+            throws Throwable{
         Integer pageNo = 1;
         Integer pageSize = Integer.MAX_VALUE;
         if(mulMap.containsKey("pageNo") && mulMap.containsKey("pageSize")){

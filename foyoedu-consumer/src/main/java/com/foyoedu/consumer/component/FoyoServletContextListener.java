@@ -1,0 +1,40 @@
+package com.foyoedu.consumer.component;
+
+import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import java.io.*;
+import java.util.Properties;
+import java.util.Set;
+
+@WebListener
+@Slf4j
+public class FoyoServletContextListener implements ServletContextListener {
+
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+
+        // 使用properties对象加载输入流
+        Properties properties = new Properties();
+        // 使用ClassLoader加载properties配置文件生成对应的输入流
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("foyoConfig.yml");
+        // 使用properties对象加载输入流
+        try {
+            properties.load(in);
+            ServletContext context = servletContextEvent.getServletContext();
+            for (String key : properties.stringPropertyNames()) {
+                context.setAttribute(key, properties.getProperty(key));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
+    }
+}

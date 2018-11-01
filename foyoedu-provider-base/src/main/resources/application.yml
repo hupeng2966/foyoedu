@@ -37,12 +37,18 @@
 #    instance-id: ${spring.application.name}-${server.port}
 #    prefer-ip-address: true     #访问路径可以显示IP地址
 #
+spring:
+  redis:
+    host: 192.168.0.68
 
 info:
   app.name: foyoedu
   company.name: www.foyoedu.com
   build.artifactId: ${project.artifactId}
   build.version: ${project.version}
+
+session:
+  expire: 20
 
 
 

@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 
-public class TypeConvert<E> {
+public class MapUtils<E> {
 
     private Class<?> clazz;
 
-    public TypeConvert(){
+    public MapUtils(){
         super();
     }
-    public TypeConvert(Class<?> clazz) {
+    public MapUtils(Class<?> clazz) {
         super();
         this.clazz = clazz;
     }
