@@ -1,5 +1,6 @@
 package com.foyoedu.common.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +23,7 @@ public class JsonUtils {
      * @return
      */
     public static String objectToJson(Object data) {
-    	try {
+        try {
 			String string = MAPPER.writeValueAsString(data);
 			return string;
 		} catch (JsonProcessingException e) {

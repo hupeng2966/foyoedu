@@ -28,7 +28,7 @@ public class IDUtils {
 	}
 	
 	/**
-	 * 商品id生成
+	 * 生成id
 	 */
 	public static long genItemId() {
 		//取当前时间的长整形值包含毫秒
@@ -42,9 +42,5 @@ public class IDUtils {
 		long id = new Long(str);
 		return id;
 	}
-	
-	public static void main(String[] args) {
-		for(int i=0;i< 100;i++)
-		System.out.println(genItemId());
-	}
+
 }

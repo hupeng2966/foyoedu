@@ -2,6 +2,8 @@ package com.foyoedu.consumer.config;
 
 import com.foyoedu.consumer.component.TokenAuthorFilter;
 import com.netflix.loadbalancer.*;
+import feign.Request;
+import feign.Retryer;
 import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -13,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.boot.web.servlet.ErrorPage;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Configuration
 public class ConfigBeans {
@@ -50,9 +50,10 @@ public class ConfigBeans {
         return new EmbeddedServletContainerCustomizer() {
             @Override
             public void customize(ConfigurableEmbeddedServletContainer container) {
-                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
-                ErrorPage error400Page = new ErrorPage(HttpStatus.BAD_REQUEST, "/400.html");
-                container.addErrorPages( error404Page,error400Page);
+                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html");
+                ErrorPage error400Page = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400.html");
+                ErrorPage error405Page = new ErrorPage(HttpStatus.METHOD_NOT_ALLOWED, "/error/405.html");
+                container.addErrorPages( error404Page, error400Page, error405Page);
             }
         };
     }
@@ -66,7 +67,7 @@ public class ConfigBeans {
     }
 
     /**
-     * 拦截器注册
+     * 过滤器注册
      */
     @Bean
     public FilterRegistrationBean myFilterRegistration() {
@@ -77,4 +78,25 @@ public class ConfigBeans {
         //registration.setOrder(1);// 顺序
         return registration;
     }
+
+    /**
+     * Feign 超时设置
+     * @return
+     */
+    @Bean
+    public Request.Options options() {
+        int connectTimeOutMillis = 30000;//超时时间
+        int readTimeOutMillis = 30000;
+        return new Request.Options(connectTimeOutMillis, readTimeOutMillis);
+    }
+
+    /**
+     * Feign 重试设置
+     * @return
+     */
+    @Bean
+    public Retryer feignRetryer() {
+        return new Retryer.Default(100, SECONDS.toMillis(1), 3);
+    }
+
 }

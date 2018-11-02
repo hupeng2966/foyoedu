@@ -36,13 +36,13 @@ public class LoginServiceImpl implements LoginService {
             return FoyoUtils.error(400, "用户名或密码不正确");
         }
         // 如果正确生成token
-        String token = UUID.randomUUID().toString();
+        String token = "SESSION:" + UUID.randomUUID().toString();
         // 把用户信息写入redis、key：token value：用户信息
         user.setPwd("");
 
-        stringRedisTemplate.opsForValue().append("SESSION:" + token,JsonUtils.objectToJson(user));
+        stringRedisTemplate.opsForValue().append(token,JsonUtils.objectToJson(user));
         // 设置Session的过期时间
-        stringRedisTemplate.expire("SESSION:" + token, SESSION_EXPIRE, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(token, SESSION_EXPIRE, TimeUnit.MINUTES);
         // 把token返回
         return FoyoUtils.ok(token);
     }

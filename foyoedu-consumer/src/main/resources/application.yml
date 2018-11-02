@@ -19,12 +19,6 @@
 #      charset: UTF-8
 #      force: true
 #
-spring:
-  redis:
-    host: 192.168.0.68
 
-cookie:
-  token_key: token
 
-login:
-  uri: login/login.html
+
