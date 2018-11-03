@@ -20,7 +20,7 @@ public class LoginController {
 
     @Autowired
     private LoginClientService loginClientService;
-    @Value("${" + FoyoUtils.TOKEN_KEY + "}")
+    @Value("${cookie.token_key}")
     private String TOKEN_KEY;
 
     @PostMapping("/login")

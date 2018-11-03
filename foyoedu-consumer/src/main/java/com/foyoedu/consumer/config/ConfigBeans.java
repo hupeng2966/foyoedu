@@ -5,6 +5,7 @@ import com.netflix.loadbalancer.*;
 import feign.Request;
 import feign.Retryer;
 import feign.auth.BasicAuthRequestInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -61,22 +62,13 @@ public class ConfigBeans {
     /**
      *zuul访问帐号及密码设置
      */
+    @Value("${zuul.username}")
+    private String ZUUL_USERNAME;
+    @Value("${zuul.pwd}")
+    private String ZUUL_PWD;
     @Bean
     public BasicAuthRequestInterceptor getBasicAuthRequestInterceptor() {
-        return new BasicAuthRequestInterceptor("foyoedu","foyoedu");
-    }
-
-    /**
-     * 过滤器注册
-     */
-    @Bean
-    public FilterRegistrationBean myFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new TokenAuthorFilter());
-        registration.addUrlPatterns("/foyo/*");// 拦截路径
-        registration.setName("tokenAuthorFilter");// 拦截器名称
-        //registration.setOrder(1);// 顺序
-        return registration;
+        return new BasicAuthRequestInterceptor(ZUUL_USERNAME,ZUUL_PWD);
     }
 
     /**

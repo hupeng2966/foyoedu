@@ -1,32 +1,28 @@
 #在github代码托管中心的https://github.com/hupeng2966/foyoedu-config.git里获取foyoedu-zuul-config微服务的配置文件
 #server:
 #  port: 9527
-#
-#spring:
-#  application:
-#    name: foyoedu-zuul
-#
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://eureka.foyoedu.com:7001/eureka
-#  instance:
-#    instance-id: ${spring.application.name}-${server.port}
-#    prefer-ip-address: true
-#
-#zuul:
-#  #ignored-services: FOYOEDU-PROVIDER-BASE
-#  #prefix: /foyoedu
-#  ignored-services: "*"
-#  routes:
-#    FOYOEDU-PROVIDER-BASE: /base/**
-#
-#security:
-#  basic:
-#    enabled: true
-#  user:
-#    name: foyoedu
-#    password: foyoedu
+
+spring:
+  application:
+    name: foyoedu-zuul
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}-${server.port}
+    prefer-ip-address: true
+
+zuul:
+  #prefix: /foyoedu
+  ignored-services: "*"
+  routes:
+    FOYOEDU-PROVIDER-BASE: /base/**
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: foyoedu
+    password: foyoedu
 
 info:
   app.name: foyoedu

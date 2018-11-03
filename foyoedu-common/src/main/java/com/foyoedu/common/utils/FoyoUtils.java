@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class FoyoUtils {
-    public static final String TOKEN_KEY = "cookie.token_key";
-    public static final String LOGIN_URI = "login.uri";
-    public static final String REDIS_HOST = "spring.redis.host";
 
     public static FoyoResult errorMessage(Throwable throwable) {
         String msg = throwable.getMessage();

@@ -2,6 +2,6 @@ spring:
   cloud:
     config:
       name: foyoedu-eureka-config     #需要从github上读取的资源名称，注意没有yml后缀名
-      profile: dev
+      #profile: dev
       label: master
       uri: http://config.foyoedu.com:3344      #SpringCloudConfig获取的服务地址
