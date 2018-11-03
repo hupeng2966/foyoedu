@@ -3,6 +3,8 @@ package com.foyoedu.common.utils;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.PageResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.ServletContext;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
+@Component
 public class FoyoUtils {
 
     public static FoyoResult errorMessage(Throwable throwable) {
@@ -45,6 +48,13 @@ public class FoyoUtils {
 
     public static HttpServletResponse getResponse() {
         return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getResponse();
+    }
+
+    @Value("${cookie.token_key}")
+    private String TOKEN_KEY;
+    public String getToken() {
+        HttpServletRequest request = getRequest();
+        return  CookieUtils.getCookieValue(getRequest(), "token");
     }
 
 }

@@ -1,7 +1,6 @@
 package com.foyoedu.common.service;
 
 import com.foyoedu.common.pojo.FoyoResult;
-import com.foyoedu.common.service.hystrix.DeptClientServiceFactory;
 import com.foyoedu.common.service.hystrix.LoginClientServiceFactory;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

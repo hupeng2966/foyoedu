@@ -1,8 +1,11 @@
 package com.foyoedu.consumer.config;
 
+import com.foyoedu.common.utils.FoyoUtils;
 import com.foyoedu.consumer.component.TokenAuthorFilter;
 import com.netflix.loadbalancer.*;
 import feign.Request;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
 import feign.Retryer;
 import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,20 +18,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.boot.web.servlet.ErrorPage;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.Enumeration;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Configuration
 public class ConfigBeans {
-//    /*
-//    * 用Feign的情况下就不用手动开启restTemplate
-//    * */
-//    @Bean
-//    @LoadBalanced
-//    public RestTemplate getRestTemplate()
-//    {
-//        return new RestTemplate();
-//    }
 
     /**
      *Ribbon负载均衡算法

@@ -1,14 +1,16 @@
 package com.foyoedu.base.controller;
 
-import com.foyoedu.base.service.impl.BaseServiceImpl;
 import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.base.service.DeptService;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.utils.FoyoUtils;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Accessors(chain=true)
@@ -16,6 +18,9 @@ public class DeptController {
 
     @Autowired
     private DeptService deptService;
+
+    @Autowired
+    private FoyoUtils foyoUtils;
 
     @PostMapping(value = "/dept/add")
     public FoyoResult addDept(@RequestBody Dept dept) throws Throwable {
@@ -25,6 +30,7 @@ public class DeptController {
 
     @GetMapping(value = "/dept/get/{id}")
     public FoyoResult getDept(@PathVariable("id") Long id) throws Throwable {
+        String token = foyoUtils.getToken();
         return FoyoUtils.ok(deptService.getById(id));
     }
 
