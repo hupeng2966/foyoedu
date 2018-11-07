@@ -1,5 +1,6 @@
 package com.foyoedu.consumer.config;
 
+import com.foyoedu.common.pojo.CommonConfig;
 import com.foyoedu.common.utils.FoyoUtils;
 import com.foyoedu.consumer.component.TokenAuthorFilter;
 import com.netflix.loadbalancer.*;
@@ -8,6 +9,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import feign.Retryer;
 import feign.auth.BasicAuthRequestInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -62,13 +64,11 @@ public class ConfigBeans {
     /**
      *zuul访问帐号及密码设置
      */
-    @Value("${zuul.username}")
-    private String ZUUL_USERNAME;
-    @Value("${zuul.pwd}")
-    private String ZUUL_PWD;
+    @Autowired
+    private CommonConfig commonConfig;
     @Bean
     public BasicAuthRequestInterceptor getBasicAuthRequestInterceptor() {
-        return new BasicAuthRequestInterceptor(ZUUL_USERNAME,ZUUL_PWD);
+        return new BasicAuthRequestInterceptor(commonConfig.getZUUL_USERNAME(),commonConfig.getZUUL_PWD());
     }
 
     /**

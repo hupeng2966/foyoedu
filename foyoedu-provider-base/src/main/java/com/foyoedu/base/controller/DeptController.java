@@ -19,9 +19,6 @@ public class DeptController {
     @Autowired
     private DeptService deptService;
 
-    @Autowired
-    private FoyoUtils foyoUtils;
-
     @PostMapping(value = "/dept/add")
     public FoyoResult addDept(@RequestBody Dept dept) throws Throwable {
         deptService.addDept(dept);
@@ -30,7 +27,7 @@ public class DeptController {
 
     @GetMapping(value = "/dept/get/{id}")
     public FoyoResult getDept(@PathVariable("id") Long id) throws Throwable {
-        String token = foyoUtils.getToken();
+        String token = FoyoUtils.getToken();
         return FoyoUtils.ok(deptService.getById(id));
     }
 
