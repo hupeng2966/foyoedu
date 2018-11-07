@@ -16,4 +16,7 @@ public class CommonConfig {
 
     @Value("${zuul.pwd}")
     private String ZUUL_PWD;
+
+    @Value("${redis.session.expire}")
+    private Long REDIS_SESSION_EXPIRE;
 }

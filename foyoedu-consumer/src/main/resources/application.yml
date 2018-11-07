@@ -1,6 +1,25 @@
 ##在github代码托管中心的https://github.com/hupeng2966/foyoedu-config.git里获取foyoedu-consumer-config微服务的配置文件
 server:
   port: 80
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types:
+    - image/png
+    - image/jpeg
+    - image/jpg
+    - text/html
+    - image/gif
+    - application/javascript
+    - text/css
+    - application/octet-stream
+    - application/json
+    - application/msword
+    - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    - application/vnd.ms-excel
+    - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    - application/vnd.ms-powerpoint
+    - application/vnd.openxmlformats-officedocument.presentationml.presentation
 
 eureka:
   client:
@@ -21,3 +40,14 @@ hystrix:
           enabled: false
         isolation:
           strategy: SEMAPHORE
+
+spring:
+  application:
+    name: foyoedu-consumer
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+    cache-period: 2592000           # 资源缓存时间，单位秒，30天
+
+

@@ -62,6 +62,8 @@ public class MapUtils<E> {
         return map;
     }
 
+
+
 //    public E MapToPojo(Map<String, Object> obj) throws Exception {
 //        Field[] fs = clazz.getDeclaredFields();
 //        E o = (E)clazz.newInstance();

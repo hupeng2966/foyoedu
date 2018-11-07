@@ -1,5 +1,6 @@
 package com.foyoedu.consumer.component;
 
+import com.foyoedu.common.pojo.CommonConfig;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.User;
 import com.foyoedu.common.utils.CookieUtils;
@@ -38,8 +39,8 @@ public class TokenAuthorFilter implements Filter {
     @Value("${login.uri}")
     private String LOGIN_URI;
 
-    @Value("${session.expire}")
-    private Long SESSION_EXPIRE;
+    @Autowired
+    private CommonConfig config;
 
     @Autowired
     StringRedisTemplate redisTemplate;
@@ -78,7 +79,7 @@ public class TokenAuthorFilter implements Filter {
             }else if(JsonUtils.jsonToPojo(json.toString(), User.class).isDelete()){
                 result = FoyoUtils.error(401,"该token目前已处于停用状态，请联系邮件系统管理员确认!");
             }else{
-                redisTemplate.expire(token, SESSION_EXPIRE, TimeUnit.MINUTES);
+                redisTemplate.expire(token, config.getREDIS_SESSION_EXPIRE(), TimeUnit.MINUTES);
                 // 如果登录成功，则跳转到登录前浏览的页面，如果登录前是从login.jsp过来的，则不跳转
                 Object uri = session.getAttribute("requestURI");
                 if(uri != null) {

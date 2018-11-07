@@ -21,6 +21,7 @@ zuul:
   ignored-services: "*"
   routes:
     FOYOEDU-PROVIDER-BASE: /base/**
+  trace-request-body: true
 
 security:
   basic:

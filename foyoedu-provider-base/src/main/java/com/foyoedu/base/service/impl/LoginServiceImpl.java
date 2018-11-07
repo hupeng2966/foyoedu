@@ -2,6 +2,7 @@ package com.foyoedu.base.service.impl;
 
 import com.foyoedu.base.dao.UserDao;
 import com.foyoedu.base.service.LoginService;
+import com.foyoedu.common.pojo.CommonConfig;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.User;
 import com.foyoedu.common.utils.FoyoUtils;
@@ -23,8 +24,8 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Value("${session.expire}")
-    private Long SESSION_EXPIRE;
+    @Autowired
+    private CommonConfig config;
 
     @Override
     public FoyoResult userLogin(String loginId, String pwd) {
@@ -42,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
 
         stringRedisTemplate.opsForValue().append(token,JsonUtils.objectToJson(user));
         // 设置Session的过期时间
-        stringRedisTemplate.expire(token, SESSION_EXPIRE, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(token, config.getREDIS_SESSION_EXPIRE(), TimeUnit.MINUTES);
         // 把token返回
         return FoyoUtils.ok(token);
     }
