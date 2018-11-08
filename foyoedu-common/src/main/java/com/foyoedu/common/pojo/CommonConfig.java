@@ -19,4 +19,7 @@ public class CommonConfig {
 
     @Value("${redis.session.expire}")
     private Long REDIS_SESSION_EXPIRE;
+
+    @Value("${fastdfs.storage.service-url}")
+    private String FASTDFS_STORAGE_URL;
 }

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
-
 public class LoginController {
 
     @Autowired
