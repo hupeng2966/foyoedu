@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ServletComponentScan
 @EnableEurekaClient
 @EnableFeignClients(basePackages = {"com.foyoedu.common.service"})
-@ComponentScan(value = "com.foyoedu")
+//@ComponentScan(value = "com.foyoedu")
 public class Consumer_App {
     public static void main(String[] args) {
         SpringApplication.run(Consumer_App.class, args);
