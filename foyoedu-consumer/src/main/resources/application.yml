@@ -37,9 +37,19 @@ hystrix:
     default:
       execution:
         timeout:
-          enabled: false
+          enabled: true
         isolation:
           strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000
+      circuitBreaker:
+        sleepWindowInMilliseconds: 60000
+        forceClosed: true
+
+ribbon:
+  SocketTimeout: 60000
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
 
 spring:
   application:
@@ -48,6 +58,7 @@ spring:
     chain:
       gzipped: true
       cache: true
-    cache-period: 2592000           # 资源缓存时间，单位秒，30天
+    cache:
+      period: 86400d  # 资源缓存时间，单位秒，1天
 
 

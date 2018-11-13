@@ -1,4 +1,4 @@
-package com.foyoedu.common.pojo;
+package com.foyoedu.common.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,4 +22,5 @@ public class CommonConfig {
 
     @Value("${fastdfs.storage.service-url}")
     private String FASTDFS_STORAGE_URL;
+
 }

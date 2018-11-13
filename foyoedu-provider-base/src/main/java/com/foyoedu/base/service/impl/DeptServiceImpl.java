@@ -1,9 +1,9 @@
 package com.foyoedu.base.service.impl;
 
 import com.foyoedu.base.service.BaseService;
+import com.foyoedu.base.service.DeptService;
 import com.foyoedu.base.utils.Utils;
 import com.foyoedu.common.pojo.Dept;
-import com.foyoedu.base.service.DeptService;
 import com.foyoedu.common.pojo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

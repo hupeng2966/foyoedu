@@ -1,12 +1,13 @@
 package com.foyoedu.common.utils;
 
-import com.foyoedu.common.pojo.CommonConfig;
+import com.foyoedu.common.config.CommonConfig;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.PageResult;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.TargetInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -29,19 +29,23 @@ public class FoyoUtils {
         foyoUtils = this;
     }
 
-    public static FoyoResult errorMessage(Throwable throwable) {
+    public static String errorMessage(Throwable throwable) {
         String msg = throwable.getMessage();
         log.error(msg);
         Integer status = Integer.parseInt(msg.split(" ")[1]);
-        return error(status, throwable.getMessage());
+        String msgfunction = msg.split(" ")[3];
+        String content = msg.substring(msg.indexOf("content:")+9);
+        Document doc = Jsoup.parse(content);
+        Element msgContent = doc.getElementsByTag("div").get(2);
+        return error(status, msgfunction+" → "+msgContent.text());
     }
 
-    public static FoyoResult ok(Object data) {
-        return new FoyoResult(data);
+    public static String ok(Object data) {
+        return new FoyoResult(data).toString();
     }
 
-    public static FoyoResult error(Integer status, String errMsg) {
-        return  new FoyoResult(status, errMsg);
+    public static String error(Integer status, String errMsg) {
+        return  new FoyoResult(status, errMsg).toString();
     }
 
     public static PageResult pageResult(Integer total, Object data) {

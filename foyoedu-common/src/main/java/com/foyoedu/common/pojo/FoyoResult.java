@@ -1,6 +1,8 @@
 package com.foyoedu.common.pojo;
 
+import com.foyoedu.common.utils.JsonUtils;
 import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -27,6 +29,11 @@ public class FoyoResult implements Serializable {
     public FoyoResult(Integer status, String errMsg) {
         this.status = status;
         this.errMsg = errMsg;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.objectToJson(this);
     }
 
 }

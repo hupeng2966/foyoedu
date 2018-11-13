@@ -1,42 +1,22 @@
 package com.foyoedu.consumer.config;
 
-import com.foyoedu.common.pojo.CommonConfig;
-import com.foyoedu.common.utils.FoyoUtils;
-import com.foyoedu.consumer.component.TokenAuthorFilter;
-import com.netflix.loadbalancer.*;
+import com.foyoedu.common.config.CommonConfig;
+import com.netflix.loadbalancer.IRule;
+import com.netflix.loadbalancer.ZoneAvoidanceRule;
 import feign.Request;
-import feign.RequestInterceptor;
-import feign.RequestTemplate;
 import feign.Retryer;
 import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.boot.web.servlet.ErrorPage;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.resource.GzipResourceResolver;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.Enumeration;
-import java.util.concurrent.TimeUnit;
-
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Configuration
 public class ConfigBeans {
-
     /**
      *Ribbon负载均衡算法
      */
@@ -54,14 +34,14 @@ public class ConfigBeans {
      * 统一页码处理配置
      */
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return new EmbeddedServletContainerCustomizer() {
+    public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
+        return new WebServerFactoryCustomizer<ConfigurableWebServerFactory>() {
             @Override
-            public void customize(ConfigurableEmbeddedServletContainer container) {
+            public void customize(ConfigurableWebServerFactory factory) {
                 ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html");
                 ErrorPage error400Page = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400.html");
                 ErrorPage error405Page = new ErrorPage(HttpStatus.METHOD_NOT_ALLOWED, "/error/405.html");
-                container.addErrorPages( error404Page, error400Page, error405Page);
+                factory.addErrorPages( error404Page, error400Page, error405Page);
             }
         };
     }
@@ -82,8 +62,8 @@ public class ConfigBeans {
      */
     @Bean
     public Request.Options options() {
-        int connectTimeOutMillis = 30000;//超时时间
-        int readTimeOutMillis = 30000;
+        int connectTimeOutMillis = 60000;//超时时间
+        int readTimeOutMillis = 60000;
         return new Request.Options(connectTimeOutMillis, readTimeOutMillis);
     }
 
@@ -93,7 +73,7 @@ public class ConfigBeans {
      */
     @Bean
     public Retryer feignRetryer() {
-        return new Retryer.Default(100, SECONDS.toMillis(1), 3);
+        return new Retryer.Default(60, SECONDS.toMillis(3), 3);
     }
 
 }

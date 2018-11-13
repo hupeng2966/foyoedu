@@ -1,9 +1,9 @@
 package com.foyoedu.common.pojo;
 
+import com.foyoedu.common.utils.JsonUtils;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 public class PageResult implements Serializable {
@@ -17,5 +17,10 @@ public class PageResult implements Serializable {
 	public PageResult(Integer total, Object data) {
 		this.data = data;
 		this.total = total;
+	}
+
+	@Override
+	public String toString() {
+		return JsonUtils.objectToJson(this);
 	}
 }

@@ -14,7 +14,6 @@ public class FeignHeader implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate requestTemplate) {
         HttpServletRequest request = FoyoUtils.getRequest();
-
         Enumeration<String> headerNames = request.getHeaderNames();
         if (headerNames != null) {
             while (headerNames.hasMoreElements()) {

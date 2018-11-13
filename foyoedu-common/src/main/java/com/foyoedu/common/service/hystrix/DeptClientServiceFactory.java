@@ -1,7 +1,6 @@
 package com.foyoedu.common.service.hystrix;
 
 import com.foyoedu.common.pojo.Dept;
-import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.DeptClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import feign.hystrix.FallbackFactory;
@@ -16,37 +15,37 @@ public class DeptClientServiceFactory implements FallbackFactory<DeptClientServi
         return new DeptClientService() {
 
             @Override
-            public FoyoResult addDept(Dept dept) {
+            public String addDept(Dept dept) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult getDept(Long id) {
+            public String getDept(Long id) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult listDeptTest(MultiValueMap<String, String> paramMap) {
+            public String listDeptTest(MultiValueMap<String, String> paramMap) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult deleteDeptById(Long id) {
+            public String deleteDeptById(Long id) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult delete(Dept dept) {
+            public String delete(Dept dept) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult updateDept(Dept dept) {
+            public String updateDept(Dept dept) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public FoyoResult hello() {
+            public String hello() {
                 return FoyoUtils.errorMessage(t);
             }
         };

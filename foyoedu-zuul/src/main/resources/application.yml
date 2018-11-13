@@ -5,6 +5,20 @@ server:
 spring:
   application:
     name: foyoedu-zuul
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+#  security:
+#    user:
+#      name: foyoedu
+#      password: foyoedu
 
 eureka:
   instance:
@@ -14,21 +28,34 @@ eureka:
     service-url:
       defaultZone: http://eureka.foyoedu.com:7001/eureka
 
-
 zuul:
   #prefix: /foyoedu
   sensitive-headers: true
   ignored-services: "*"
   routes:
     FOYOEDU-PROVIDER-BASE: /base/**
-  trace-request-body: true
+  host:
+    socket-timeout-millis: 60000
+    connect-timeout-millis: 60000
 
-security:
-  basic:
-    enabled: true
-  user:
-    name: foyoedu
-    password: foyoedu
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 60000
+      circuitBreaker:
+        sleepWindowInMilliseconds: 60000
+        forceClosed: true
+
+ribbon:
+  SocketTimeout: 60000
+  ConnectTimeout: 60000
+  ReadTimeout: 60000
 
 info:
   app.name: foyoedu

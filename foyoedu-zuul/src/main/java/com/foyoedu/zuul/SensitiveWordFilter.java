@@ -1,14 +1,15 @@
 package com.foyoedu.zuul;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,13 @@ public class SensitiveWordFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
+        HttpServletRequest request = ctx.getRequest();
+        String ct = request.getHeader("Content-Type");
+        if(!StringUtils.isEmpty(ct)) {
+            if(request.getHeader("Content-Type").indexOf("multipart/form-data") != -1) {
+                return null;
+            }
+        }
         //定义一堆敏感词汇
         List<String> list = Arrays.asList("傻b", "尼玛", "操蛋","fuck");
 
@@ -48,7 +56,7 @@ public class SensitiveWordFilter extends ZuulFilter {
         String body = "";
         if (!ctx.isChunkedRequestBody()) {
             try {
-                in = ctx.getRequest().getInputStream();
+                in = request.getInputStream();
                 if (in != null) {
                     body = StreamUtils.copyToString(in, Charset.forName("UTF-8"));
                 }
@@ -63,13 +71,13 @@ public class SensitiveWordFilter extends ZuulFilter {
                             //遍历list集合，看看获取得到的数据有没有敏感词汇
                             for (String s : list) {
                                 if (v.indexOf(s) != -1) {
-                                    map.replace(k,v,v.replaceAll(s,"*****"));
+                                    map.replace(k,v,v.replaceAll(s,"***"));
                                 }
                             }
                         }
                     });
                     final byte[] reqBodyBytes = MAPPER.writeValueAsString(map).getBytes();
-                    ctx.setRequest(new HttpServletRequestWrapper(ctx.getRequest()) {
+                    ctx.setRequest(new HttpServletRequestWrapper(request) {
                         @Override
                         public ServletInputStream getInputStream() throws IOException {
                             return new ServletInputStreamWrapper(reqBodyBytes);

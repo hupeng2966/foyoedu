@@ -2,13 +2,11 @@ package com.foyoedu.base.service.impl;
 
 import com.foyoedu.base.dao.UserDao;
 import com.foyoedu.base.service.LoginService;
-import com.foyoedu.common.pojo.CommonConfig;
-import com.foyoedu.common.pojo.FoyoResult;
+import com.foyoedu.common.config.CommonConfig;
 import com.foyoedu.common.pojo.User;
 import com.foyoedu.common.utils.FoyoUtils;
 import com.foyoedu.common.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -28,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
     private CommonConfig config;
 
     @Override
-    public FoyoResult userLogin(String loginId, String pwd) {
+    public String userLogin(String loginId, String pwd) {
         User user = userDao.findByLoginId(loginId);
         if(user == null) {
             return FoyoUtils.error(400, "用户名不存在");
