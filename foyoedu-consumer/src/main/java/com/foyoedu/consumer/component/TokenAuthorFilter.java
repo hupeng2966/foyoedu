@@ -11,8 +11,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,12 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
-//@Component
-//@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
+@Component
+@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
-
-    @Value("${cookie.token_key}")
-    private String TOKEN_KEY;
 
     @Value("${login.uri}")
     private String LOGIN_URI;
@@ -49,10 +48,7 @@ public class TokenAuthorFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse)response;
         HttpSession session= req.getSession();
 
-        res.setCharacterEncoding("UTF-8");
-        //res.setContentType("application/json; charset=utf-8");
-
-        String token = CookieUtils.getCookieValue(req, TOKEN_KEY);
+        String token = CookieUtils.getCookieValue(req, config.getTOKEN_KEY());
         String result = "";
 
         // 以下都是需要验证URI的流程
@@ -69,7 +65,7 @@ public class TokenAuthorFilter implements Filter {
             if (StringUtils.isEmpty(json)) {
                 result = FoyoUtils.error(403,"token没有认证通过!原因为：客户端请求中认证的token信息无效");
             }else if(JsonUtils.jsonToPojo(json.toString(), User.class).isDelete()){
-                result = FoyoUtils.error(401,"该token目前已处于停用状态，请联系邮件系统管理员确认!");
+                result = FoyoUtils.error(401,"该token目前已处于停用状态，请联系系统管理员!");
             }else{
                 redisTemplate.expire(token, config.getREDIS_SESSION_EXPIRE(), TimeUnit.MINUTES);
                 // 如果登录成功，则跳转到登录前浏览的页面，如果登录前是从login.jsp过来的，则不跳转
@@ -94,7 +90,7 @@ public class TokenAuthorFilter implements Filter {
         }
 
         if(foyoResult.getStatus() == 401){
-            outPutResponse(res, foyoResult);
+            FoyoUtils.outPutResponse(res, result);
         }
     }
 
@@ -103,34 +99,7 @@ public class TokenAuthorFilter implements Filter {
 
     }
 
-    public void outPutResponse(HttpServletResponse response, FoyoResult result) throws IOException {
-        String jsonStr = JsonUtils.objectToJson(result);
-        response.getWriter().write(jsonStr);
-        response.getWriter().flush();
-        response.getWriter().close();
-//        PrintWriter writer = null;
-//        OutputStreamWriter osw = null;
-//        try {
-//            osw = new OutputStreamWriter(response.getOutputStream() , "UTF-8");
-//            writer = new PrintWriter(osw, true);
-//            String jsonStr = JsonUtils.objectToJson(result);
-//            writer.write(jsonStr);
-//            writer.flush();
-//            writer.close();
-//            osw.close();
-//        } catch (UnsupportedEncodingException e) {
-//            log.error("过滤器返回信息失败:" + e.getMessage(), e);
-//        } catch (IOException e) {
-//            log.error("过滤器返回信息失败:" + e.getMessage(), e);
-//        } finally {
-//            if (null != writer) {
-//                writer.close();
-//            }
-//            if(null != osw){
-//                osw.close();
-//            }
-//        }
-    }
+
 
 }
 

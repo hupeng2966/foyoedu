@@ -23,4 +23,10 @@ public class CommonConfig {
     @Value("${fastdfs.storage.service-url}")
     private String FASTDFS_STORAGE_URL;
 
+    @Value("${foyo.timeout}")
+    private Integer TIMEOUT;
+
+    @Value("${foyo.filter-file-size}")
+    private Integer FILTER_FILESIZE;
+
 }

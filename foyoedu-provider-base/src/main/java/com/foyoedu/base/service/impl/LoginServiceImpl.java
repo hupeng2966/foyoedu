@@ -34,6 +34,9 @@ public class LoginServiceImpl implements LoginService {
         if(!DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
             return FoyoUtils.error(400, "用户名或密码不正确");
         }
+        if(user.isDelete()) {
+            return FoyoUtils.error(401,"该用户目前已处于停用状态，请联系系统管理员!");
+        }
         // 如果正确生成token
         String token = "SESSION:" + UUID.randomUUID().toString();
         // 把用户信息写入redis、key：token value：用户信息

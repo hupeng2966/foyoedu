@@ -13,6 +13,7 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Configuration
@@ -62,8 +63,8 @@ public class ConfigBeans {
      */
     @Bean
     public Request.Options options() {
-        int connectTimeOutMillis = 60000;//超时时间
-        int readTimeOutMillis = 60000;
+        int connectTimeOutMillis = commonConfig.getTIMEOUT();//超时时间
+        int readTimeOutMillis = commonConfig.getTIMEOUT();
         return new Request.Options(connectTimeOutMillis, readTimeOutMillis);
     }
 
