@@ -35,6 +35,7 @@ public class TeacherController {
         if(foyoResult.getStatus() != 200) {
             FoyoUtils.outPutResponse(FoyoUtils.getResponse(),teacherData);
             return;
+
         }
         List<Teacher> list = (List<Teacher>) foyoResult.getData();
     }
