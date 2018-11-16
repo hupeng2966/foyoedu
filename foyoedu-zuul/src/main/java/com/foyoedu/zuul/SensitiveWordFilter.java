@@ -50,7 +50,7 @@ public class SensitiveWordFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
         String ct = request.getHeader("Content-Type");
         if(!StringUtils.isEmpty(ct)) {
-            if(request.getHeader("Content-Type").indexOf("multipart/form-data") != -1) {
+            if(request.getHeader("Content-Type").contains("multipart/form-data")) {
                 return null;
             }
         }

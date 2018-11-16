@@ -30,7 +30,7 @@ public class FileSizeFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse)servletResponse;
         String ct = request.getHeader("Content-Type");
         if(!StringUtils.isEmpty(ct)) {
-            if(request.getHeader("Content-Type").indexOf("multipart/form-data") != -1
+            if(request.getHeader("Content-Type").contains("multipart/form-data")
                     && Integer.parseInt(request.getHeader("Content-Length")) >= config.getFILTER_FILESIZE()*1024*1024) {
                 FoyoUtils.outPutResponse(response, FoyoUtils.error(500,"上传的文件不能超过" + config.getFILTER_FILESIZE() +"MB"));
                 return;

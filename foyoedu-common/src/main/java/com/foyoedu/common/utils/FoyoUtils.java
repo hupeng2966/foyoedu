@@ -1,5 +1,6 @@
 package com.foyoedu.common.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.foyoedu.common.config.CommonConfig;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.PageResult;
@@ -42,9 +43,12 @@ public class FoyoUtils {
         Integer status = Integer.parseInt(msg.split(" ")[1]);
         String msgfunction = msg.split(" ")[3];
         String content = msg.substring(msg.indexOf("content:")+9);
-        Document doc = Jsoup.parse(content);
-        Element msgContent = doc.getElementsByTag("div").get(2);
-        return error(status, msgfunction+" → "+msgContent.text());
+        try{
+            Document doc = Jsoup.parse(content);
+            Element msgContent = doc.getElementsByTag("div").get(2);
+            return error(status, msgfunction+" → "+msgContent.text());
+        }catch (Exception e){ }
+        return error(status, msgfunction+" → "+ JSON.parseObject(content).getString("message"));
     }
 
     public static String ok(Object data) {

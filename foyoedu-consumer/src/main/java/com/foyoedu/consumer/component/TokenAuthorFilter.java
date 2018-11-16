@@ -2,7 +2,7 @@ package com.foyoedu.consumer.component;
 
 import com.foyoedu.common.config.CommonConfig;
 import com.foyoedu.common.pojo.FoyoResult;
-import com.foyoedu.common.pojo.User;
+import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.CookieUtils;
 import com.foyoedu.common.utils.FoyoUtils;
 import com.foyoedu.common.utils.JsonUtils;
@@ -11,10 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
-@Component
-@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
+//@Component
+//@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
 
     @Value("${login.uri}")
@@ -64,7 +62,7 @@ public class TokenAuthorFilter implements Filter {
             }
             if (StringUtils.isEmpty(json)) {
                 result = FoyoUtils.error(403,"token没有认证通过!原因为：客户端请求中认证的token信息无效");
-            }else if(JsonUtils.jsonToPojo(json.toString(), User.class).isDelete()){
+            }else if(JsonUtils.jsonToPojo(json.toString(), Teacher.class).isDelete()){
                 result = FoyoUtils.error(401,"该token目前已处于停用状态，请联系系统管理员!");
             }else{
                 redisTemplate.expire(token, config.getREDIS_SESSION_EXPIRE(), TimeUnit.MINUTES);

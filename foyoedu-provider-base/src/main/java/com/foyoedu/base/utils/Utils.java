@@ -6,9 +6,7 @@ import com.foyoedu.common.pojo.PageResult;
 import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Utils {
 
@@ -16,11 +14,12 @@ public class Utils {
             throws Throwable{
         Integer pageNo = 1;
         Integer pageSize = Integer.MAX_VALUE;
-        if(mulMap.containsKey("pageNo") && mulMap.containsKey("pageSize")){
-            pageNo = Integer.parseInt(mulMap.get("pageNo").get(0));
-            pageSize = Integer.parseInt(mulMap.get("pageSize").get(0));
+        if(mulMap != null) {
+            if (mulMap.containsKey("pageNo") && mulMap.containsKey("pageSize")) {
+                pageNo = Integer.parseInt(mulMap.get("pageNo").get(0));
+                pageSize = Integer.parseInt(mulMap.get("pageSize").get(0));
+            }
         }
-
         Integer total = obj.totalCount(filterCondition);
         List<Dept> list = null;
         if(total > 0) {

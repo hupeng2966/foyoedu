@@ -1,9 +1,9 @@
 package com.foyoedu.base.service.impl;
 
-import com.foyoedu.common.utils.SqlUtils;
 import com.foyoedu.base.dao.BaseDao;
 import com.foyoedu.base.service.BaseService;
 import com.foyoedu.common.utils.MapUtils;
+import com.foyoedu.common.utils.SqlUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,6 +43,10 @@ public class BaseServiceImpl<E> implements BaseService<E> {
             throw new Exception("SQL参数中含有非法字符");
         }
         return dao.delete(TBALENAME, filterCondition);
+    }
+
+    public List<E> list(String filterCondition, String sortCondition) throws Throwable {
+        return list(1,Integer.MAX_VALUE,filterCondition,sortCondition);
     }
 
     public List<E> list(Integer pageNo, Integer pageSize, String filterCondition, String sortCondition) throws Throwable {

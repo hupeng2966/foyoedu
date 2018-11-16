@@ -1,9 +1,9 @@
 package com.foyoedu.base.service.impl;
 
-import com.foyoedu.base.dao.UserDao;
+import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.LoginService;
 import com.foyoedu.common.config.CommonConfig;
-import com.foyoedu.common.pojo.User;
+import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.FoyoUtils;
 import com.foyoedu.common.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    private UserDao userDao;
+    private TeacherDao dao;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -27,7 +27,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String userLogin(String loginId, String pwd) {
-        User user = userDao.findByLoginId(loginId);
+        Teacher user = dao.findByLoginId(loginId);
         if(user == null) {
             return FoyoUtils.error(400, "用户名不存在");
         }
