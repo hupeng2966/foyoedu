@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
@@ -14,12 +16,15 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 @Component
+@PropertySource( name="sensitive-word-dict.properties",value={"classpath:sensitive-word-dict.properties"},ignoreResourceNotFound=false,encoding="UTF-8")
 public class SensitiveWordFilter extends ZuulFilter {
+    @Value("#{'${filterWord}'.split(',')}")
+    private List<String> list;
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
     @Override
     public String filterType() {
@@ -49,8 +54,6 @@ public class SensitiveWordFilter extends ZuulFilter {
                 return null;
             }
         }
-        //定义一堆敏感词汇
-        List<String> list = Arrays.asList("傻b", "尼玛", "操蛋","fuck");
 
         InputStream in = null;
         String body = "";
@@ -68,12 +71,28 @@ public class SensitiveWordFilter extends ZuulFilter {
                     HashMap<String, String> map = MAPPER.readValue(body, HashMap.class);
                     map.forEach((k,v) -> {
                         if (!StringUtils.isEmpty(v)) {
+                            String val = v;
+
+                            if(val.contains("<")) {
+                                val = val.replaceAll("<","&lt;");
+                            }
+                            if(v.contains(">")) {
+                                val = val.replaceAll(">","&gt;");
+                            }
+                            if(v.contains("\"")) {
+                                val = val.replaceAll("\"","&quot;");
+                            }
+                            if(v.contains("'")) {
+                                val = val.replaceAll("'","&#39;");
+                            }
+
                             //遍历list集合，看看获取得到的数据有没有敏感词汇
                             for (String s : list) {
-                                if (v.indexOf(s) != -1) {
-                                    map.replace(k,v,v.replaceAll(s,"***"));
+                                if (v.contains(s)) {
+                                    val = val.replaceAll(s,"***");
                                 }
                             }
+                            map.replace(k,v,val);
                         }
                     });
                     final byte[] reqBodyBytes = MAPPER.writeValueAsString(map).getBytes();
