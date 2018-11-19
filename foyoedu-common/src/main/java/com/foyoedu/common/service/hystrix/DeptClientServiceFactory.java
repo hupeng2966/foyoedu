@@ -5,7 +5,8 @@ import com.foyoedu.common.service.DeptClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
+
+import java.util.Map;
 
 @Component
 public class DeptClientServiceFactory implements FallbackFactory<DeptClientService> {
@@ -25,7 +26,7 @@ public class DeptClientServiceFactory implements FallbackFactory<DeptClientServi
             }
 
             @Override
-            public String listDeptTest(MultiValueMap<String, String> paramMap) {
+            public String listDeptTest(Map<String, String> map) {
                 return FoyoUtils.errorMessage(t);
             }
 

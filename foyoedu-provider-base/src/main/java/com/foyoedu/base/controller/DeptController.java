@@ -5,8 +5,9 @@ import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.common.utils.FoyoUtils;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @Accessors(chain=true)
@@ -28,8 +29,8 @@ public class DeptController {
     }
 
     @PostMapping(value = "/dept/list/test")
-    public String listDeptTest(@RequestBody MultiValueMap<String, String> paramMap) throws Throwable {
-        return FoyoUtils.ok(deptService.listDeptTest(paramMap));
+    public String listDeptTest(@RequestBody Map<String, String> map) throws Throwable {
+        return FoyoUtils.ok(deptService.listDeptTest(map));
     }
 
     @PostMapping(value = "/dept/delete")

@@ -1,15 +1,16 @@
 package com.foyoedu.base.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.LoginService;
 import com.foyoedu.common.config.CommonConfig;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.FoyoUtils;
-import com.foyoedu.common.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
         // 把用户信息写入redis、key：token value：用户信息
         user.setPwd("");
 
-        stringRedisTemplate.opsForValue().append(token,JsonUtils.objectToJson(user));
+        stringRedisTemplate.opsForValue().append(token, JSON.toJSONString(user));
         // 设置Session的过期时间
         stringRedisTemplate.expire(token, config.getREDIS_SESSION_EXPIRE(), TimeUnit.MINUTES);
         // 把token返回

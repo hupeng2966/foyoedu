@@ -1,8 +1,8 @@
 package com.foyoedu.consumer.component;
 
+import com.alibaba.fastjson.JSON;
 import com.foyoedu.common.pojo.OnlineUser;
 import com.foyoedu.common.utils.FoyoUtils;
-import com.foyoedu.common.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -32,7 +32,7 @@ public class OnlineUserHttpSessionListener implements HttpSessionListener {
         user.setIp(request.getRemoteAddr());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
         user.setFirstTime(sdf.format(new Date()));
-        template.opsForValue().append("ONLINE:" + APPLICATION_NAME + ":" + sessionId, JsonUtils.objectToJson(user));
+        template.opsForValue().append("ONLINE:" + APPLICATION_NAME + ":" + sessionId, JSON.toJSONString(user));
         template.expire("ONLINE:" + APPLICATION_NAME + ":" + sessionId, 12, TimeUnit.HOURS);
     }
 

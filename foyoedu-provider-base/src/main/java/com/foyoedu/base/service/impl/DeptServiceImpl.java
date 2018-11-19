@@ -7,7 +7,8 @@ import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.common.pojo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
+
+import java.util.Map;
 
 @Service
 public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptService {
@@ -26,16 +27,16 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
         return dept.getDeptno();
     }
 
-    public PageResult listDeptTest(MultiValueMap<String, String> paramMap) throws Throwable {
+    public PageResult listDeptTest(Map<String, String> map) throws Throwable {
         String filterCondition = "";
         String sortCondition = "";
-        if (paramMap.containsKey("deptno") && paramMap.get("deptno").get(0).isEmpty()) {
-            filterCondition = "where deptno >" + Integer.parseInt(paramMap.get("deptno").get(0));
+        if (map.containsKey("deptno") && !map.get("deptno").isEmpty()) {
+            filterCondition = "where deptno >" + Integer.parseInt(map.get("deptno"));
         }
-        if (paramMap.containsKey("sort") && paramMap.get("sort").get(0).isEmpty()) {
-            sortCondition = "order by " + paramMap.get("sort").get(0);
+        if (map.containsKey("sort") && !map.get("sort").isEmpty()) {
+            sortCondition = "order by " + map.get("sort");
         }
-        return Utils.pageData(paramMap, Service, filterCondition, sortCondition);
+        return Utils.pageData(map, Service, filterCondition, sortCondition);
     }
 
     public boolean deleteDept(Dept dept) throws Throwable {

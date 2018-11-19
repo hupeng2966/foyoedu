@@ -1,6 +1,6 @@
 package com.foyoedu.common.pojo;
 
-import com.foyoedu.common.utils.JsonUtils;
+import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,7 +33,7 @@ public class FoyoResult implements Serializable {
 
     @Override
     public String toString() {
-        return JsonUtils.objectToJson(this);
+        return JSON.toJSONString(this);
     }
 
 }

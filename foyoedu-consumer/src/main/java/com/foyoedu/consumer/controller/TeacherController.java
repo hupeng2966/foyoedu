@@ -8,7 +8,6 @@ import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.service.TeacherClientService;
 import com.foyoedu.common.utils.ExcelUtil;
 import com.foyoedu.common.utils.FoyoUtils;
-import com.foyoedu.common.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class TeacherController {
     @PostMapping("/export")
     public void findTeacherData() {
         String data = service.findTeacherData();
-        FoyoResult result = JsonUtils.jsonToPojo(data, FoyoResult.class);
+        FoyoResult result = JSON.parseObject(data, FoyoResult.class);
         if(result.getStatus() != 200) {
             FoyoUtils.outPutResponse(FoyoUtils.getResponse(),data);
             return;
@@ -62,13 +62,8 @@ public class TeacherController {
             rows.add(row);
         });
         excelData.setRows(rows);
-        //生成本地
-        /*File f = new File("c:/test.xlsx");
-        FileOutputStream out = new FileOutputStream(f);
-        ExportExcelUtils.exportExcel(data, out);
-        out.close();*/
         try {
-            ExcelUtil.exportExcel("教师信息.xlsx",excelData);
+            ExcelUtil.exportExcel("教师用户信息.xlsx",excelData);
         } catch (Exception e) {
             FoyoUtils.outPutResponse(FoyoUtils.error(500,e.getMessage()));
         }

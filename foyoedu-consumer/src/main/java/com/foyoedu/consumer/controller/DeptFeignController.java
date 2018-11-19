@@ -33,13 +33,10 @@ public class DeptFeignController {
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/dept/list")
     public String list(@RequestBody Map<String, String> map) {
-        MultiValueMap<String, String> paramMap = new LinkedMultiValueMap<>();
-        if(map.size() > 0){
-            for (Map.Entry<String, String> entry : map.entrySet()){
-                paramMap.add(entry.getKey(), entry.getValue());
-            }
-        }
-        return service.listDeptTest(paramMap);
+//        for (Map.Entry<String, String> entry : map.entrySet()){
+//            paramMap.add(entry.getKey(), entry.getValue());
+//        }
+        return service.listDeptTest(map);
     }
 
     @PostMapping(value = "/dept/delete")

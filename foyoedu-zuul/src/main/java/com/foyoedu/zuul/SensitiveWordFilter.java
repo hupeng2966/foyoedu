@@ -1,6 +1,6 @@
 package com.foyoedu.zuul;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.http.ServletInputStreamWrapper;
@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @PropertySource( name="sensitive-word-dict.properties",value={"classpath:sensitive-word-dict.properties"},ignoreResourceNotFound=false,encoding="UTF-8")
@@ -25,7 +25,6 @@ public class SensitiveWordFilter extends ZuulFilter {
     @Value("#{'${filterWord}'.split(',')}")
     private List<String> list;
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
     @Override
     public String filterType() {
         // 前置过滤器
@@ -68,34 +67,34 @@ public class SensitiveWordFilter extends ZuulFilter {
             }
             if(!StringUtils.isEmpty(body)) {
                 try {
-                    HashMap<String, String> map = MAPPER.readValue(body, HashMap.class);
-                    map.forEach((k,v) -> {
-                        if (!StringUtils.isEmpty(v)) {
-                            String val = v;
+                    Map<String, Object> map = JSON.parseObject(body, Map.class);
+                    map.forEach((k, v) -> {
+                        if (!StringUtils.isEmpty(v) && v instanceof String) {
+                            String val = v.toString();
 
-                            if(val.contains("<")) {
-                                val = val.replaceAll("<","&lt;");
+                            if (val.contains("<")) {
+                                val = val.replaceAll("<", "&lt;");
                             }
-                            if(v.contains(">")) {
-                                val = val.replaceAll(">","&gt;");
+                            if (val.contains(">")) {
+                                val = val.replaceAll(">", "&gt;");
                             }
-                            if(v.contains("\"")) {
-                                val = val.replaceAll("\"","&quot;");
+                            if (val.contains("\"")) {
+                                val = val.replaceAll("\"", "&quot;");
                             }
-                            if(v.contains("'")) {
-                                val = val.replaceAll("'","&#39;");
+                            if (val.contains("'")) {
+                                val = val.replaceAll("'", "&#39;");
                             }
 
                             //遍历list集合，看看获取得到的数据有没有敏感词汇
                             for (String s : list) {
-                                if (v.contains(s)) {
-                                    val = val.replaceAll(s,"***");
+                                if (val.contains(s)) {
+                                    val = val.replaceAll(s, "***");
                                 }
                             }
-                            map.replace(k,v,val);
+                            if (!v.toString().equals(val)) map.replace(k, v, val);
                         }
                     });
-                    final byte[] reqBodyBytes = MAPPER.writeValueAsString(map).getBytes();
+                    final byte[] reqBodyBytes = JSON.toJSONBytes(map);
                     ctx.setRequest(new HttpServletRequestWrapper(request) {
                         @Override
                         public ServletInputStream getInputStream() throws IOException {
@@ -112,9 +111,7 @@ public class SensitiveWordFilter extends ZuulFilter {
                             return reqBodyBytes.length;
                         }
                     });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                }catch (Exception e) { }
             }
         }
         return null;

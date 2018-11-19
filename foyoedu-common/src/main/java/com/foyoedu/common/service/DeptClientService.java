@@ -3,8 +3,9 @@ package com.foyoedu.common.service;
 import com.foyoedu.common.pojo.Dept;
 import com.foyoedu.common.service.hystrix.DeptClientServiceFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 //@FeignClient(value = "FOYOEDU-PROVIDER-BASE", fallbackFactory = DeptClientServiceFactory.class)
 @FeignClient(value = "FOYOEDU-ZUUL", fallbackFactory = DeptClientServiceFactory.class)
@@ -18,7 +19,7 @@ public interface DeptClientService {
     public String getDept(@PathVariable("id") Long id);
 
     @PostMapping(value = "/dept/list/test")
-    public String listDeptTest(@RequestBody MultiValueMap<String, String> paramMap);
+    public String listDeptTest(@RequestBody Map<String, String> map);
 
     @PostMapping(value = "/dept/delete")
     public String deleteDeptById(@RequestParam("id") Long id);
