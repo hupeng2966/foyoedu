@@ -98,6 +98,9 @@ public class FoyoUtils {
         return foyoUtils.commonConfig.getFASTDFS_STORAGE_URL() + storePath.getFullPath();
     }
 
+    public static void outPutResponse(String result) {
+        outPutResponse(FoyoUtils.getResponse(), result);
+    }
     public static void outPutResponse(HttpServletResponse response, String result) {
         try {
             response.setCharacterEncoding("UTF-8");
