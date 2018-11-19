@@ -29,4 +29,7 @@ public class CommonConfig {
     @Value("${foyo.filter-file-size}")
     private Integer FILTER_FILESIZE;
 
+    @Value("${foyo.filter-file-type}")
+    private String FILTER_FILETYPE;
+
 }
