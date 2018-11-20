@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 复尧自定义响应结构
  */
 @Data
-public class FoyoResult implements Serializable {
+public class FoyoResult<T> implements Serializable {
 
     // 响应业务状态
     private Integer status;
@@ -18,10 +18,10 @@ public class FoyoResult implements Serializable {
     private String errMsg;
 
     // 响应中的数据
-    private Object data;
+    private T data;
 
     public FoyoResult() {}
-    public FoyoResult(Object data) {
+    public FoyoResult(T data) {
         this.status = 200;
         this.data = data;
     }

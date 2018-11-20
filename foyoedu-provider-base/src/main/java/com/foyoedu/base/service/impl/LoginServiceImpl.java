@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.LoginService;
 import com.foyoedu.common.config.CommonConfig;
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class LoginServiceImpl implements LoginService {
     private CommonConfig config;
 
     @Override
-    public String userLogin(String loginId, String pwd) {
+    public FoyoResult userLogin(String loginId, String pwd) {
         Teacher user = dao.findByLoginId(loginId);
         if(user == null) {
             return FoyoUtils.error(400, "用户名不存在");

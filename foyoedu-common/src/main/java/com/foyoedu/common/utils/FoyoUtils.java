@@ -37,7 +37,7 @@ public class FoyoUtils {
         foyoUtils = this;
     }
 
-    public static String errorMessage(Throwable throwable) {
+    public static FoyoResult errorMessage(Throwable throwable) {
         String msg = throwable.getMessage();
         log.error(msg);
         Integer status = Integer.parseInt(msg.split(" ")[1]);
@@ -51,12 +51,12 @@ public class FoyoUtils {
         return error(status, msgfunction+" → "+ JSON.parseObject(content).getString("message"));
     }
 
-    public static String ok(Object data) {
-        return new FoyoResult(data).toString();
+    public static <T> FoyoResult ok(T data) {
+        return new FoyoResult<T>(data);
     }
 
-    public static String error(Integer status, String errMsg) {
-        return  new FoyoResult(status, errMsg).toString();
+    public static FoyoResult error(Integer status, String errMsg) {
+        return  new FoyoResult<String>(status, errMsg);
     }
 
     public static PageResult pageResult(Integer total, Object data) {
@@ -98,14 +98,14 @@ public class FoyoUtils {
         return foyoUtils.commonConfig.getFASTDFS_STORAGE_URL() + storePath.getFullPath();
     }
 
-    public static void outPutResponse(String result) {
+    public static void outPutResponse(FoyoResult result) {
         outPutResponse(FoyoUtils.getResponse(), result);
     }
-    public static void outPutResponse(HttpServletResponse response, String result) {
+    public static void outPutResponse(HttpServletResponse response, FoyoResult result) {
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("text/plain;charset=utf-8");
-            response.getWriter().write(result);
+            response.getWriter().write(result.toString());
             response.getWriter().flush();
             response.getWriter().close();
         } catch (IOException e) {

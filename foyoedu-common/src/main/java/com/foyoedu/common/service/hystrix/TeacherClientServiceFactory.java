@@ -1,5 +1,6 @@
 package com.foyoedu.common.service.hystrix;
 
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.TeacherClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import feign.hystrix.FallbackFactory;
@@ -13,12 +14,12 @@ public class TeacherClientServiceFactory implements FallbackFactory<TeacherClien
     public TeacherClientService create(Throwable throwable) {
         final Throwable t = throwable;
         return new TeacherClientService() {
-            public String addTeacherData(@RequestPart MultipartFile file) {
+            public FoyoResult addTeacherData(@RequestPart MultipartFile file) {
                 return FoyoUtils.errorMessage(t);
             }
 
             @Override
-            public String findTeacherData() {
+            public FoyoResult findTeacherData() {
                 return FoyoUtils.errorMessage(t);
             }
         };

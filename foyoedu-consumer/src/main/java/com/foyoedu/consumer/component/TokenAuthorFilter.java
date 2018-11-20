@@ -11,10 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
-@Component
-@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
+//@Component
+//@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
 public class TokenAuthorFilter implements Filter {
 
     @Value("${login.uri}")
@@ -49,7 +47,7 @@ public class TokenAuthorFilter implements Filter {
         HttpSession session= req.getSession();
 
         String token = CookieUtils.getCookieValue(req, config.getTOKEN_KEY());
-        String result = "";
+        FoyoResult result = null;
 
         // 以下都是需要验证URI的流程
         if (StringUtils.isEmpty(token)) {
@@ -80,8 +78,7 @@ public class TokenAuthorFilter implements Filter {
             }
         }
         // token验证不通过的，全部跳转到登录页面
-        FoyoResult foyoResult = JSON.parseObject(result, FoyoResult.class);
-        if(foyoResult.getStatus() == 403) {
+        if(result.getStatus() == 403) {
             // 记录用户未登录状态下的访问URI
             String requestURI = req.getRequestURI();
             session.setAttribute("requestURI", requestURI);
@@ -89,7 +86,7 @@ public class TokenAuthorFilter implements Filter {
             return;
         }
 
-        if(foyoResult.getStatus() == 401){
+        if(result.getStatus() == 401){
             FoyoUtils.outPutResponse(res, result);
         }
     }

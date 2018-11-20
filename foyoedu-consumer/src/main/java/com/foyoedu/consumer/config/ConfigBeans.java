@@ -13,6 +13,7 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -77,6 +78,15 @@ public class ConfigBeans {
     @Bean
     public Retryer feignRetryer() {
         return new Retryer.Default(60, SECONDS.toMillis(3), 3);
+    }
+
+    /**
+     * websocket
+     * @return
+     */
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 
 }

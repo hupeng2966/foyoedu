@@ -22,13 +22,12 @@ public class LoginController {
     private String TOKEN_KEY;
 
     @PostMapping("/login")
-    public String login(@RequestParam("loginId") String loginId, @RequestParam("pwd") String pwd) throws Throwable {
-        String result = loginClientService.login(loginId, pwd);
-        FoyoResult foyoResult = JSON.parseObject(result, FoyoResult.class);
+    public FoyoResult login(@RequestParam("loginId") String loginId, @RequestParam("pwd") String pwd) throws Throwable {
+        FoyoResult result = loginClientService.login(loginId, pwd);
         //判断登录是否成功
-        if(foyoResult.getStatus() == 200) {
+        if(result.getStatus() == 200) {
             HttpServletResponse response = FoyoUtils.getResponse();
-            String token = foyoResult.getData().toString();
+            String token = result.getData().toString();
             CookieUtils.setCookie(FoyoUtils.getRequest(), response, TOKEN_KEY, token);
             response.sendRedirect("/foyo/main.html");
         }

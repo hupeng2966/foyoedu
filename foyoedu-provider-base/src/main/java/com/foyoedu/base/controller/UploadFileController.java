@@ -1,6 +1,7 @@
 package com.foyoedu.base.controller;
 
 import com.foyoedu.base.service.UploadService;
+import com.foyoedu.common.pojo.FoyoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ public class UploadFileController {
     private UploadService service;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String uploadFile(@RequestPart MultipartFile file) throws Throwable {
+    public FoyoResult uploadFile(@RequestPart MultipartFile file) throws Throwable {
         return service.uploadFile(file);
     }
 }

@@ -1,5 +1,6 @@
 package com.foyoedu.common.service.hystrix;
 
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.UploadClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import feign.hystrix.FallbackFactory;
@@ -14,7 +15,7 @@ public class UploadClientServiceFactory implements FallbackFactory<UploadClientS
         final Throwable t = throwable;
         return new UploadClientService() {
             @Override
-            public String uploadFile(MultipartFile file) {
+            public FoyoResult uploadFile(MultipartFile file) {
                 return FoyoUtils.errorMessage(t);
             }
         };

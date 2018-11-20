@@ -3,13 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>main</title>
+
 </head>
 <body>
     <h1>主菜单</h1>
-
-    <form action="/foyo/dept/add" method="post">
-        <input type="text" name="dname" value="操蛋部">
-        <input type="submit" value="submit">
+    <form action="/foyo/consumer/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" value="上传" />
     </form>
+    <br/>
+    <br/>
+    <form action="/foyo/export" method="post">
+        <input type="submit" value="下载" />
+    </form>
+    <input type="button" id="btnSend" value="发消息" />
+    <input type="button" id="btnClose" value="关闭" />
 </body>
+<script type="text/javascript">
+
+    if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else {
+        console.log("您的浏览器支持WebSocket");
+        var socket;
+        socket = new WebSocket("ws://localhost/foyo/websocket");
+        //打开事件
+        socket.onopen = function() {
+            console.log("Socket 已打开");
+        };
+        //获得消息事件
+        socket.onmessage = function(msg) {
+            console.log(msg.data);
+        };
+        //关闭事件
+        socket.onclose = function() {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function() {
+            alert("Socket发生了错误");
+        }
+        window.unload = function(){
+            socket.close();
+        };
+
+        document.getElementById("btnSend").onclick = function() {
+            socket.send("这是来自客户端的消息" + location.href + new Date());
+        };
+
+        document.getElementById("btnClose").onclick = function() {
+            socket.close();
+        };
+    }
+</script>
 </html>

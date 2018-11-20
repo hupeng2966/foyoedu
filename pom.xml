@@ -15,6 +15,7 @@
         <module>foyoedu-eureka</module>
         <module>foyoedu-zuul</module>
         <module>foyoedu-config</module>
+        <module>foyoedu-OAuth2</module>
     </modules>
     <packaging>pom</packaging>
 

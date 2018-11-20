@@ -1,5 +1,6 @@
 package com.foyoedu.consumer.controller;
 
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.UploadClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ public class UploadController {
     private UploadClientService service;
 
     @PostMapping(value = "/provider/upload")
-    public String providerUploadFile(@RequestParam(value = "file",required = true) MultipartFile file) {
+    public FoyoResult providerUploadFile(@RequestParam(value = "file",required = true) MultipartFile file) {
         return service.uploadFile(file);
     }
     @PostMapping(value = "/consumer/upload")
-    public String consumerUploadFile(@RequestParam(value = "file",required = true) MultipartFile file) {
+    public FoyoResult consumerUploadFile(@RequestParam(value = "file",required = true) MultipartFile file) {
         try {
             String url = FoyoUtils.saveFdfsFile(file);
             Map result = new HashMap();

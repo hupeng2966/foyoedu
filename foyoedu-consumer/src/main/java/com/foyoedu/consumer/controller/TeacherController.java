@@ -1,7 +1,6 @@
 package com.foyoedu.consumer.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.foyoedu.common.pojo.ExcelData;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.Teacher;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,19 +24,18 @@ public class TeacherController {
     private TeacherClientService service;
 
     @PostMapping("/import")
-    public String addTeacherData(@RequestParam(value = "file",required = true) MultipartFile file) {
-        return service.addTeacherData(file);
+    public FoyoResult addTeacherData(@RequestParam(value = "file",required = true) MultipartFile file) {
+        return  service.addTeacherData(file);
     }
 
     @PostMapping("/export")
     public void findTeacherData() {
-        String data = service.findTeacherData();
-        FoyoResult result = JSON.parseObject(data, FoyoResult.class);
+        FoyoResult result = service.findTeacherData();
         if(result.getStatus() != 200) {
-            FoyoUtils.outPutResponse(FoyoUtils.getResponse(),data);
+            FoyoUtils.outPutResponse(FoyoUtils.getResponse(),result);
             return;
         }
-        List<Teacher> list = JSONObject.parseArray(JSON.toJSONString(result.getData()), Teacher.class);
+        List<Teacher> list = JSON.parseArray(JSON.toJSONString(result.getData()), Teacher.class);
         ExcelData excelData = new ExcelData();
         excelData.setName("教师用户信息");
         //设置导出列名

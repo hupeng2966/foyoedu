@@ -1,6 +1,7 @@
 package com.foyoedu.base.controller;
 
 import com.foyoedu.base.service.TeacherService;
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,12 +16,13 @@ public class TeacherController {
     private TeacherService service;
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String addTeacherData(@RequestPart MultipartFile file) throws Throwable {
-        return service.addTeacherData(file);
+    public FoyoResult addTeacherData(@RequestPart MultipartFile file) throws Throwable {
+        service.addTeacherData(file);
+        return FoyoUtils.ok("ok");
     }
 
     @PostMapping("/export")
-    public String findTeacherData() throws Throwable {
+    public FoyoResult findTeacherData() throws Throwable {
         return FoyoUtils.ok(service.list("",""));
     }
 }

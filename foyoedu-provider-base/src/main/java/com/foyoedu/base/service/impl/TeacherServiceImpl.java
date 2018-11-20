@@ -5,6 +5,7 @@ import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.TeacherService;
 import com.foyoedu.base.utils.Utils;
 import com.foyoedu.common.pojo.Dept;
+import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.PageResult;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.ExcelUtil;
@@ -34,7 +35,7 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
     private TeacherDao teacherDao;
 
     @Override
-    public String addTeacherData(MultipartFile file) throws Throwable {
+    public int addTeacherData(MultipartFile file) throws Throwable {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         InputStream in = file.getInputStream(); // 文件流
         ExcelUtil.checkExcelVaild(file);
@@ -80,7 +81,6 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
 //                System.out.print(obj + "\t");
 //            }
         }
-        teacherDao.addTeacherList(list);
-        return FoyoUtils.ok("ok");
+        return teacherDao.addTeacherList(list);
     }
 }
