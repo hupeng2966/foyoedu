@@ -1,15 +1,12 @@
 package com.foyoedu.base.service.impl;
 
-import com.foyoedu.base.dao.BaseDao;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.TeacherService;
-import com.foyoedu.base.utils.Utils;
-import com.foyoedu.common.pojo.Dept;
-import com.foyoedu.common.pojo.FoyoResult;
-import com.foyoedu.common.pojo.PageResult;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.ExcelUtil;
-import com.foyoedu.common.utils.FoyoUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,9 +14,9 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +30,13 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
     }
     @Autowired
     private TeacherDao teacherDao;
+
+    public List<Teacher> findTeacherData() throws Throwable {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        objectMapper.writerWithView(Teacher.TeacherWithoutPwd.class).writeValue(bos, super.list("",""));
+        return JSON.parseArray(bos.toString(),Teacher.class);
+    }
 
     @Override
     public int addTeacherData(MultipartFile file) throws Throwable {

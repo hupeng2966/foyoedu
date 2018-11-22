@@ -41,8 +41,8 @@ public class FoyoUtils {
         String msg = throwable.getMessage();
         log.error(msg);
         Integer status = Integer.parseInt(msg.split(" ")[1]);
-        String msgfunction = msg.split(" ")[3];
-        String content = msg.substring(msg.indexOf("content:")+9);
+        String msgfunction = FoyoUtils.getRequest().getRequestURI()+" → " + msg.split(" ")[3];
+        String content = msg.substring(msg.indexOf("content:") + 9);
         try{
             Document doc = Jsoup.parse(content);
             Element msgContent = doc.getElementsByTag("div").get(2);
@@ -104,7 +104,7 @@ public class FoyoUtils {
     public static void outPutResponse(HttpServletResponse response, FoyoResult result) {
         try {
             response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/plain;charset=utf-8");
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(result.toString());
             response.getWriter().flush();
             response.getWriter().close();

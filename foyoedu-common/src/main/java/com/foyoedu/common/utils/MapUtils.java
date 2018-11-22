@@ -34,7 +34,7 @@ public class MapUtils<E> {
         Field[] fs = clazz.getDeclaredFields();
         E o = (E)clazz.newInstance();
         for(Field field : fs){
-            //获取属相名
+            //获取属性名
             String attributeName = field.getName();
             if(obj.containsKey(attributeName)) {
                 int mod = field.getModifiers();

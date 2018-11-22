@@ -43,7 +43,7 @@ public class ConfigBeans {
                 ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html");
                 //没传参数
                 ErrorPage error400Page = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400.html");
-                //提交类型不匹配（比如:post接收却用get请求）
+                //请求类型不匹配（比如:post接收却用get请求）
                 ErrorPage error405Page = new ErrorPage(HttpStatus.METHOD_NOT_ALLOWED, "/error/405.html");
                 factory.addErrorPages( error404Page, error400Page, error405Page);
             }

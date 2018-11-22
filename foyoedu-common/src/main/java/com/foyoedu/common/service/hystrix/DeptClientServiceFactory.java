@@ -13,6 +13,7 @@ import java.util.Map;
 public class DeptClientServiceFactory implements FallbackFactory<DeptClientService> {
     @Override
     public DeptClientService create(Throwable throwable) {
+
         final Throwable t = throwable;
         return new DeptClientService() {
 
@@ -51,6 +52,5 @@ public class DeptClientServiceFactory implements FallbackFactory<DeptClientServi
                 return FoyoUtils.errorMessage(t);
             }
         };
-
     }
 }

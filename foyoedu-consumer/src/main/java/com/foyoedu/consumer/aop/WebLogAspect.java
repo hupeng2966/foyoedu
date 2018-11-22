@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Web层日志切面
  */
 @Aspect
-//@Order(1)
+//@Order(2)
 @Component
 @Slf4j
 public class WebLogAspect {

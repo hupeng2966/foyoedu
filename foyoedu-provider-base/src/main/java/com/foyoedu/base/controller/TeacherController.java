@@ -23,6 +23,7 @@ public class TeacherController {
 
     @PostMapping("/export")
     public FoyoResult findTeacherData() throws Throwable {
-        return FoyoUtils.ok(service.list("",""));
+        return FoyoUtils.ok(service.findTeacherData());
+        //return FoyoUtils.ok(service.list("",""));
     }
 }

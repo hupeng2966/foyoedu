@@ -7,12 +7,15 @@ import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.service.DeptClientService;
 import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -23,22 +26,27 @@ public class DeptFeignController {
     private DeptClientService service;
 
     @PostMapping(value = "/dept/add")
-    public FoyoResult add(Dept dept) {
+    public FoyoResult add(@Valid Dept dept/*, BindingResult errors*/) {
+//        if(errors.hasErrors()) {
+//            errors.getAllErrors().stream().forEach(error -> {
+//                 FoyoUtils.outPutResponse(FoyoUtils.error(500,error.getDefaultMessage()));
+//            });
+//            return null;
+//        }
         return service.addDept(dept);
     }
 
-    @GetMapping(value = "/dept/get/{id}")
+    @GetMapping(value = "/dept/get/{id:\\d+}")
     public FoyoResult get(@PathVariable("id") Long id) {
         return service.getDept(id);
     }
-
     //要求前端必须content-type="application/json"
     //请求体必须json数据
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/dept/list")
     public FoyoResult list(@RequestBody Map<String, String> map) {
 //        for (Map.Entry<String, String> entry : map.entrySet()){
-//            paramMap.add(entry.getKey(), entry.getValue());
+//            entry.getKey(), entry.getValue();
 //        }
         return service.listDeptTest(map);
     }
@@ -58,8 +66,9 @@ public class DeptFeignController {
         return service.updateDept(dept);
     }
 
-    @RequestMapping(value = "/hello")
-    public FoyoResult hello(){
-        return FoyoUtils.ok("hello");
+    //@RequestMapping(value = "/hello", produces = "text/plain;charset=UTF-8")
+    @GetMapping("/hello")
+    public FoyoResult hello() {
+        return service.hello();
     }
 }
