@@ -84,10 +84,10 @@ public class ExcelUtil {
             }
             XSSFSheet sheet = wb.createSheet(sheetName);
             writeExcel(wb, sheet, data);
-            OutputStream os = response.getOutputStream();
-            wb.write(os);
-            os.flush();
-            os.close();
+            try(OutputStream os = response.getOutputStream();) {
+                wb.write(os);
+                os.flush();
+            }
         } finally {
             wb.close();
         }

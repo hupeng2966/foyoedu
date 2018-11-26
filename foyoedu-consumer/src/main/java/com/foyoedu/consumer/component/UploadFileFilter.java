@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Component
-@WebFilter(urlPatterns = "/foyo/*", filterName = "uploadFileFilter")
+@WebFilter(urlPatterns = "/foyo/*", filterName = "uploadFileFilter", asyncSupported = true)
 public class UploadFileFilter implements Filter {
 
     @Autowired

@@ -1,20 +1,15 @@
 package com.foyoedu.consumer.component;
 
-import lombok.extern.slf4j.Slf4j;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.io.*;
-import java.util.Properties;
 
 @WebListener
-@Slf4j
 public class FoyoServletContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+
 
 //        // 使用properties对象加载输入流
 //        Properties properties = new Properties();

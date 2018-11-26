@@ -9,6 +9,7 @@ import com.foyoedu.common.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping(value = "/foyo")
@@ -37,9 +39,20 @@ public class DeptFeignController {
     }
 
     @GetMapping(value = "/dept/get/{id:\\d+}")
-    public FoyoResult get(@PathVariable("id") Long id) {
-        return service.getDept(id);
+    public Callable<FoyoResult> get(@PathVariable("id") Long id) {
+        Callable<FoyoResult> result = new Callable<FoyoResult>() {
+			@Override
+			public FoyoResult call() throws Exception {
+				return service.getDept(id);
+			}
+		};
+        return result;
     }
+
+//    public FoyoResult get(@PathVariable("id") Long id) {
+//        return service.getDept(id);
+//    }
+
     //要求前端必须content-type="application/json"
     //请求体必须json数据
     @SuppressWarnings("unchecked")
@@ -69,6 +82,7 @@ public class DeptFeignController {
     //@RequestMapping(value = "/hello", produces = "text/plain;charset=UTF-8")
     @GetMapping("/hello")
     public FoyoResult hello() {
+        int i = 1/0;
         return service.hello();
     }
 }

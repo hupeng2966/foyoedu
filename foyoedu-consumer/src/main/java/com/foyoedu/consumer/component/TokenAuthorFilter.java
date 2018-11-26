@@ -11,8 +11,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
-//@Component
-//@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter")
+@Component
+@WebFilter(urlPatterns = "/foyo/*", filterName = "tokenAuthorFilter", asyncSupported = true)
 public class TokenAuthorFilter implements Filter {
 
     @Value("${login.uri}")

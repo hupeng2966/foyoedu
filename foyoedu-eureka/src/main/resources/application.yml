@@ -5,6 +5,10 @@ server:
 spring:
   application:
     name: foyoedu-eureka-config
+  security:
+    user:
+      name: foyoedu
+      password: foyoedu
 eureka:
   environment: release
   instance:

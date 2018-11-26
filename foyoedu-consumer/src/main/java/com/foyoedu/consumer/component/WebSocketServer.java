@@ -8,7 +8,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
-//@ServerEndpoint("/websocket/{user}")
+//@ServerEndpoint("/foyo/websocket/{user}")
 @ServerEndpoint(value = "/foyo/websocket")
 @Component
 public class WebSocketServer {
