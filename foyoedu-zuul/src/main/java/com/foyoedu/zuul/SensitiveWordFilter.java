@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@PropertySource( name="sensitive-word-dict.properties",value={"classpath:sensitive-word-dict.properties"},ignoreResourceNotFound=false,encoding="UTF-8")
+@PropertySource(name="sensitive-word-dict.properties",value={"classpath:sensitive-word-dict.properties"},ignoreResourceNotFound=false,encoding="UTF-8")
 public class SensitiveWordFilter extends ZuulFilter {
     @Value("#{'${filterWord}'.split(',')}")
     private List<String> list;

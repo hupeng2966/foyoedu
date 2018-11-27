@@ -31,10 +31,10 @@ public class LoginServiceImpl implements LoginService {
     public FoyoResult userLogin(String loginId, String pwd) {
         Teacher user = dao.findByLoginId(loginId);
         if(user == null) {
-            return FoyoUtils.error(400, "用户名不存在");
+            return FoyoUtils.error(401, "用户名不存在");
         }
         if(!DigestUtils.md5DigestAsHex(pwd.getBytes()).equals(user.getPwd())) {
-            return FoyoUtils.error(400, "用户名或密码不正确");
+            return FoyoUtils.error(401, "用户名或密码不正确");
         }
         if(user.isDelete()) {
             return FoyoUtils.error(401,"该用户目前已处于停用状态，请联系系统管理员!");

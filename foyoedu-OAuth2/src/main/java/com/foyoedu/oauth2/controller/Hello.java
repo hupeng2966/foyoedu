@@ -1,6 +1,7 @@
-package com.foyoedu.oath2.controller;
+package com.foyoedu.oauth2.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -10,4 +11,7 @@ public class Hello {
     public String hello() {
         return "hello world";
     }
+
+    @PostMapping("/user")
+    public String user() { return "user";}
 }
