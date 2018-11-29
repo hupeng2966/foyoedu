@@ -1,13 +1,13 @@
 #在github代码托管中心的https://github.com/hupeng2966/foyoedu-config.git里获取foyoedu-provider-base-config微服务的配置文件
 server:
-  port: 9000
+  port: 9001
 
 mybatis:
   config-location: classpath:mybatis/mybatis.cfg.xml        # mybatis配置文件所在路径
-  type-aliases-package: com.foyoedu.oauth2.pojo             # 所有pojo别名类所在包
+  type-aliases-package: com.foyoedu.springsecurity.pojo             # 所有pojo别名类所在包
 spring:
   application:
-    name: foyoedu-oauth2
+    name: foyoedu-springSecurity
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
     driver-class-name: com.mysql.cj.jdbc.Driver              # mysql驱动包
