@@ -21,6 +21,10 @@ spring:
       initial-size: 10                                       # 初始化连接数
       max-total: 100                                          # 最大连接数
       max-wait-millis: 30000                                  # 等待连接获取的最大超时时间
+  rabbitmq:
+    host: 192.168.0.68
+    username: guest
+    password: guest
 
 eureka:
   instance:

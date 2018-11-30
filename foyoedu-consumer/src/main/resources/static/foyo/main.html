@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>主菜单</h1>
+
     <form action="/foyo/consumer/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="file" />
         <input type="submit" value="上传" />
@@ -14,8 +15,16 @@
     <br/>
     <br/>
     <form action="/foyo/export" method="post">
-        <input type="submit" value="下载" />
+        <input type="submit" value="导出" />
     </form>
+    <br/>
+    <br/>
+    <form action="/foyo/import" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" value="导入" />
+    </form>
+    <br/>
+    <br/>
     <input type="button" id="btnSend" value="发消息" />
     <input type="button" id="btnClose" value="关闭" />
 </body>

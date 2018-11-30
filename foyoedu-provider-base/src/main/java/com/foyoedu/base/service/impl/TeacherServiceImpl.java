@@ -1,26 +1,35 @@
 package com.foyoedu.base.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.TeacherService;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.ExcelUtil;
+import com.foyoedu.common.utils.FoyoUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements TeacherService {
@@ -39,6 +48,7 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
     }
 
     @Override
+    @SuppressWarnings(value={"unchecked", "deprecation"})
     public int addTeacherData(MultipartFile file) throws Throwable {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         InputStream in = file.getInputStream(); // 文件流
@@ -70,6 +80,8 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
             teacher.setLoginId(row.getCell(0).getStringCellValue());
             teacher.setUserName(row.getCell(2).getStringCellValue());
             teacher.setPwd(pwd);
+            teacher.setPhone(row.getCell(3).getStringCellValue());
+            FoyoUtils.validatePojo(teacher);
             list.add(teacher);
             //获取总列数(空格的不计算)
             //System.out.println("总列数：" + row.getPhysicalNumberOfCells());
@@ -86,5 +98,16 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
 //            }
         }
         return teacherDao.addTeacherList(list);
+    }
+
+    @RabbitListener(queues = "foyo.CourseSelection")
+    public void rabbitListener(Teacher teacher) {
+        System.out.print("消息内容：" + JSON.toJSONString(teacher));
+    }
+
+    @RabbitListener(queues = "foyo.CourseSelection")
+    public void rabbitListenerHead(Message message) {
+        System.out.print("消息头信息：" + message.getMessageProperties());
+        System.out.print("消息体内容：" + message.getBody());
     }
 }

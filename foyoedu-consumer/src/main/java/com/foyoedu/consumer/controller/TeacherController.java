@@ -1,13 +1,13 @@
 package com.foyoedu.consumer.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONPath;
 import com.foyoedu.common.pojo.ExcelData;
 import com.foyoedu.common.pojo.FoyoResult;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.service.TeacherClientService;
 import com.foyoedu.common.utils.ExcelUtil;
 import com.foyoedu.common.utils.FoyoUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +26,13 @@ public class TeacherController {
     private TeacherClientService service;
 
     @PostMapping("/import")
+    @ApiOperation("批量导入教师帐号")
     public FoyoResult addTeacherData(@RequestParam(value = "file",required = true) MultipartFile file) {
         return  service.addTeacherData(file);
     }
 
     @PostMapping("/export")
+    @ApiOperation("导出教师帐号")
     public void findTeacherData() {
         FoyoResult result = service.findTeacherData();
         if(result.getStatus() != 200) {
@@ -47,6 +49,7 @@ public class TeacherController {
         titles.add("登录帐号");
         titles.add("初始密码");
         titles.add("校区号");
+        titles.add("手机号码");
         titles.add("是否停用");
         excelData.setTitles(titles);
         //添加导出数据
@@ -57,6 +60,7 @@ public class TeacherController {
             row.add(item.getLoginId());
             row.add(item.getPwd());
             row.add(item.getCampusId());
+            row.add(item.getPhone());
             row.add(item.isDelete());
             rows.add(row);
         });

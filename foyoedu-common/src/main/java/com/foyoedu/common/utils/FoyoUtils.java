@@ -20,7 +20,13 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -96,6 +102,16 @@ public class FoyoUtils {
         StorePath storePath = foyoUtils.storageClient.uploadFile(file.getBytes(), extName);
         //响应上传图片的url
         return foyoUtils.commonConfig.getFASTDFS_STORAGE_URL() + storePath.getFullPath();
+    }
+
+    public static <T> void validatePojo(T obj) throws Throwable {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj);
+        List list = new ArrayList(constraintViolations);
+        if (list.size() > 0) {
+            ConstraintViolation<T> constraintViolation = (ConstraintViolation<T>) list.get(0);
+            throw new Exception(constraintViolation.getMessage());
+        }
     }
 
     public static void outPutResponse(FoyoResult result) {

@@ -32,6 +32,7 @@
         <fastjson.version>1.2.47</fastjson.version>
         <fastdfs.version>0.2.0</fastdfs.version>
         <jsoup.version>1.8.3</jsoup.version>
+        <swagger2.version>2.9.2</swagger2.version>
     </properties>
 
     <dependencyManagement>
@@ -79,6 +80,16 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
