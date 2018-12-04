@@ -17,13 +17,11 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 		SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
 		
 		UserDetails user = userDetailsService.loadUserByUsername((String) authenticationToken.getPrincipal());
-
 		if (user == null) {
 			throw new InternalAuthenticationServiceException("无法获取用户信息");
 		}
-		
+
 		SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());
-		
 		authenticationResult.setDetails(authenticationToken.getDetails());
 
 		return authenticationResult;

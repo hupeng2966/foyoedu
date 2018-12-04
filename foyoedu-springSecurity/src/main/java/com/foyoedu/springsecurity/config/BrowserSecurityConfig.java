@@ -56,12 +56,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 				.userDetailsService(foyoUserDetailsService)
 				.and()
 			.authorizeRequests()
-				.antMatchers(securityProperties.getBrowser().getLoginPage(), "/authentication/require","/code/image","/code/sms").permitAll()
+				.antMatchers("/**/*.html","/js/**/*.js","/css/**/*.css","/images/**/*.png","/images/**/*.jpg","/favicon.ico","/**/*.woff","/**/*.woff2","/validate/**/*","/authentication/require","/code/**/*").permitAll()
 				.anyRequest()
 				.authenticated()
 				.and()
-			.csrf()
-				.disable();
+			.csrf().disable();
 	}
 
 	@Bean

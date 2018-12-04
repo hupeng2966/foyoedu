@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>登录</title>
+	<script src="/js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-	<h2>标准登录页面</h2>
-	<h3>表单登录</h3>
+	<h1>All登录类型</h1>
+	<h2>表单登录</h2>
 	<form action="/authentication/form" method="post">
 		<table>
 			<tr>
-				<td>用户名:</td> 
+				<td>用户名:</td>
 				<td><input type="text" name="username"></td>
 			</tr>
 			<tr>
@@ -32,8 +33,8 @@
 			</tr>
 		</table>
 	</form>
-	
-	<h3>短信登录</h3>
+
+	<h2>短信登录</h2>
 	<form action="/authentication/mobile" method="post">
 		<table>
 			<tr>
@@ -52,10 +53,56 @@
 			</tr>
 		</table>
 	</form>
-	<br>
-	<!--<h3>社交登录</h3>-->
-	<!--<a href="/qqLogin/callback.do">QQ登录</a>-->
-	<!--&nbsp;&nbsp;&nbsp;&nbsp;-->
-	<!--<a href="/qqLogin/weixin">微信登录</a>-->
+
+	<h2>扫二维码登录</h2>
+	<div><img src="/code/qrcode" /></div>
+	<!--<h3>社交登录</h3>
+	<a href="/qqLogin/callback.do">QQ登录</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href="/qqLogin/weixin">微信登录</a>-->
 </body>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var sessionId = getCookie("JSESSIONID");
+        //循环执行，每隔1秒钟执行一次 1000
+        var t = window.setInterval(function (args) {
+            $.ajax({url:"/validate/qrtoken/"+sessionId,
+                async:true,
+                success:function(result){
+                    console.log(result);
+                    if (result.data.toString() != 'false') {
+                        clearInterval(t);
+                        $.ajax(
+                            {
+                                url: "/authentication/weixin",
+                                type: "POST",
+                                dataType: "json",
+                                data: { username: result.data},
+                                success: function (result) {
+                                    console.log(result);
+                                    window.location.href = "/hello";
+                                }
+                            });
+					}
+                }})
+		}, 10000);
+    });
+    function getCookie(c_name)
+    {
+        if (document.cookie.length>0)
+        {
+            c_start=document.cookie.indexOf(c_name + "=")
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1
+                c_end=document.cookie.indexOf(";",c_start)
+                if (c_end==-1) c_end=document.cookie.length
+                return unescape(document.cookie.substring(c_start,c_end))
+            }
+        }
+        return ""
+    }
+
+</script>
 </html>

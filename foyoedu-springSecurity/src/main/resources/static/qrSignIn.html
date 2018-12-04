@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手机登录</title>
+    <script src="/js/jquery-1.11.3.min.js"></script>
+
+</head>
+<body>
+    <form action="/authentication/form" method="post">
+        <table id="failure">
+            <tr>
+                <td>用户名:</td>
+                <td><input type="text" name="username"></td>
+            </tr>
+            <tr>
+                <td>密码:</td>
+                <td><input type="password" name="password"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button onclick="" type="submit">登录</button></td>
+            </tr>
+            <input name="qrtoken" id="qrtoken" type="hidden" />
+        </table>
+        <h1 id="success">验证通过！</h1>
+    </form>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#success").hide();
+            $("#failure").hide();
+            $("#qrtoken").val(getParam("qrtoken"));
+            var weixin = getCookie("weixin");
+            if (weixin.length > 0) {
+                $.ajax({url:"/validate/weixin?weixin="+weixin+"&qrtoken="+getParam("qrtoken"),
+                    success:function(result){
+                        console.log(result)
+                        if (result){
+                            $("#success").show();
+                        }else {
+                            $("#failure").show();
+                        }
+                    }})
+            }else {
+                $("#failure").show();
+            }
+        });
+        function getParam(paramName) {
+            var url = location.search; //获取url中"?"符后的字串
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for(var i = 0; i < strs.length; i ++) {
+                    if(strs[i].split("=")[0].toLocaleLowerCase() == paramName.toLocaleLowerCase()) {
+                        return unescape(strs[i].split("=")[1]);
+                    }
+                }
+            }
+            return "";
+        }
+        function getCookie(c_name)
+        {
+            if (document.cookie.length>0)
+            {
+                c_start=document.cookie.indexOf(c_name + "=")
+                if (c_start!=-1)
+                {
+                    c_start=c_start + c_name.length+1
+                    c_end=document.cookie.indexOf(";",c_start)
+                    if (c_end==-1) c_end=document.cookie.length
+                    return unescape(document.cookie.substring(c_start,c_end))
+                }
+            }
+            return ""
+        }
+    </script>
+</body>
+
+</html>

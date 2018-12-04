@@ -20,7 +20,9 @@ public class FoyoUserDetailsService implements UserDetailsService {
 		if (StringUtils.isEmpty(username)) return null;
 
 		String password = passwordEncoder.encode("123456");
+
 		return new User(username,password,true,true,true,true,AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+
 	}
 
 }

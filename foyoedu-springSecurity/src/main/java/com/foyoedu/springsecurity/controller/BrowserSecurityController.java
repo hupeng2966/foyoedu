@@ -3,6 +3,7 @@ package com.foyoedu.springsecurity.controller;
 
 import com.foyoedu.springsecurity.configBean.SecurityProperties;
 import com.foyoedu.springsecurity.pojo.FoyoResult;
+import com.foyoedu.springsecurity.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -30,7 +31,11 @@ public class BrowserSecurityController {
 	@RequestMapping("/authentication/require")
 	public FoyoResult requireAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
-		redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
+		if (FoyoUtils.JudgeIsMoblie(request)) {
+			redirectStrategy.sendRedirect(request, response, "/qrSignIn.html");
+		}else {
+			redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
+		}
 //		FoyoResult result = new FoyoResult();
 //		result.setStatus(HttpStatus.UNAUTHORIZED.value());
 //		result.setErrMsg("访问的服务需要身份认证，请引导用户到登录页");

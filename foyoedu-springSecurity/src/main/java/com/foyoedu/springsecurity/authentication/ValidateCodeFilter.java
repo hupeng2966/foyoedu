@@ -57,7 +57,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 			for (String url : urls) {
 				if (pathMatcher.match(url, request.getRequestURI())) {
 					try{
-						validate(new ServletWebRequest(request), urlMap.get(url));
+						boolean validated = false;
+						if (urlMap.get(url).equals(ValidateCodeType.IMAGE) && request.getParameter("qrtoken") != null) {
+							validated = true;
+						}
+						if (!validated)
+							validate(new ServletWebRequest(request), urlMap.get(url));
 					} catch (ValidateCodeException e) {
 						authenticationFailureHandler.onAuthenticationFailure(request,response,e);
 						return;
@@ -65,7 +70,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 				}
 			}
 		}
-
 		chain.doFilter(request, response);
 	}
 

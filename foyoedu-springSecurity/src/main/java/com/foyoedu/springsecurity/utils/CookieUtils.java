@@ -1,4 +1,4 @@
-package com.foyoedu.common.utils;
+package com.foyoedu.springsecurity.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,10 @@
 #在github代码托管中心的https://github.com/hupeng2966/foyoedu-config.git里获取foyoedu-provider-base-config微服务的配置文件
 server:
   port: 9001
+  servlet:
+    session:
+      cookie:
+        http-only: false
 
 mybatis:
   config-location: classpath:mybatis/mybatis.cfg.xml        # mybatis配置文件所在路径
@@ -19,5 +23,6 @@ spring:
       initial-size: 10                                       # 初始化连接数
       max-total: 100                                          # 最大连接数
       max-wait-millis: 30000                                  # 等待连接获取的最大超时时间
+
 
 
