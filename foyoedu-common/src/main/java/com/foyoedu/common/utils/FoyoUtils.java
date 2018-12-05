@@ -116,10 +116,8 @@ public class FoyoUtils {
         }
     }
 
-    public static boolean isIP(String addr)
-    {
-        if(addr.length() < 7 || addr.length() > 15 || "".equals(addr))
-        {
+    public static boolean isIP(String addr) {
+        if(addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
             return false;
         }
         /**

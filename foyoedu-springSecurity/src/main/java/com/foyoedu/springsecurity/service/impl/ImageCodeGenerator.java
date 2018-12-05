@@ -1,7 +1,7 @@
 package com.foyoedu.springsecurity.service.impl;
 
 
-import com.foyoedu.springsecurity.configBean.SecurityProperties;
+import com.foyoedu.springsecurity.config.properties.SecurityProperties;
 import com.foyoedu.springsecurity.pojo.validate.ImageCode;
 import com.foyoedu.springsecurity.pojo.validate.ValidateCode;
 import com.foyoedu.springsecurity.service.ValidateCodeGenerator;

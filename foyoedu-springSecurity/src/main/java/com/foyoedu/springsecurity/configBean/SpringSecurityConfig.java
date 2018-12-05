@@ -1,6 +1,6 @@
-package com.foyoedu.springsecurity.config;
+package com.foyoedu.springsecurity.configBean;
 
-import com.foyoedu.springsecurity.configBean.SecurityProperties;
+import com.foyoedu.springsecurity.config.properties.SecurityProperties;
 import com.foyoedu.springsecurity.service.SmsCodeSender;
 import com.foyoedu.springsecurity.service.ValidateCodeGenerator;
 import com.foyoedu.springsecurity.service.impl.ImageCodeGenerator;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -33,4 +34,7 @@ public class SpringSecurityConfig implements WebMvcConfigurer {
 	public void addViewControllers( ViewControllerRegistry registry ) {
 		registry.addViewController("/").setViewName("forward:/" + securityProperties.getBrowser().getLoginPage());
 	}
+
+	@Bean
+	public RestTemplate restTemplate() { return new RestTemplate(); }
 }

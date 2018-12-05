@@ -1,4 +1,4 @@
-package com.foyoedu.springsecurity.configBean;
+package com.foyoedu.springsecurity.config.properties;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package com.foyoedu.springsecurity.controller;
 
 
-import com.foyoedu.springsecurity.configBean.SecurityProperties;
+import com.foyoedu.springsecurity.config.properties.SecurityProperties;
 import com.foyoedu.springsecurity.pojo.FoyoResult;
 import com.foyoedu.springsecurity.utils.FoyoUtils;
 import org.springframework.beans.factory.annotation.Autowired;

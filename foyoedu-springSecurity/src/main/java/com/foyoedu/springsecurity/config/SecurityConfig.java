@@ -4,11 +4,13 @@ import com.foyoedu.springsecurity.authentication.FoyoAuthenticationFailureHandle
 import com.foyoedu.springsecurity.authentication.FoyoAuthenticationSuccessHandler;
 import com.foyoedu.springsecurity.authentication.FoyoUserDetailsService;
 import com.foyoedu.springsecurity.authentication.ValidateCodeFilter;
-import com.foyoedu.springsecurity.configBean.SecurityProperties;
+import com.foyoedu.springsecurity.config.properties.SecurityConstants;
+import com.foyoedu.springsecurity.config.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -17,7 +19,7 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import javax.sql.DataSource;
 
 @Configuration
-public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private SecurityProperties securityProperties;
@@ -45,8 +47,13 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		applyPasswordAuthenticationConfig(http);
-		http.apply(validateCodeSecurityConfig)
+		http.formLogin()
+				.loginPage(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL)
+				.loginProcessingUrl(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
+				.successHandler(foyoAuthenticationSuccessHandler)
+				.failureHandler(foyoAuthenticationFailureHandler)
+				.and()
+			.apply(validateCodeSecurityConfig)
 				.and()
 			.apply(smsCodeAuthenticationSecurityConfig)
 				.and()

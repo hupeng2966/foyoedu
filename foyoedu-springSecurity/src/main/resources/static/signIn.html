@@ -55,7 +55,7 @@
 	</form>
 
 	<h2>扫二维码登录</h2>
-	<div><img src="/code/qrcode" /></div>
+	<div><img src="/code/qrcode" onload="loadimage()" onclick="loadimage()" /></div>
 	<!--<h3>社交登录</h3>
 	<a href="/qqLogin/callback.do">QQ登录</a>
 	&nbsp;&nbsp;&nbsp;&nbsp;
@@ -64,30 +64,28 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+    });
+	function loadimage() {
         var sessionId = getCookie("JSESSIONID");
+
         //循环执行，每隔1秒钟执行一次 1000
         var t = window.setInterval(function (args) {
-            $.ajax({url:"/validate/qrtoken/"+sessionId,
-                async:true,
+            $.ajax({
+				url:"/validate/qrtoken/"+sessionId,
+				type: "POST",
+				async:true,
+                /*dataType: "json",
+                data: { "mobile": result.data,"foyoedu":"foyoedu2018"},*/
                 success:function(result){
                     console.log(result);
                     if (result.data.toString() != 'false') {
                         clearInterval(t);
-                        $.ajax(
-                            {
-                                url: "/authentication/weixin",
-                                type: "POST",
-                                dataType: "json",
-                                data: { username: result.data},
-                                success: function (result) {
-                                    console.log(result);
-                                    window.location.href = "/hello";
-                                }
-                            });
-					}
+                        window.location.href = "/hello";
+                    }
                 }})
-		}, 10000);
-    });
+        }, 1000);
+	}
+
     function getCookie(c_name)
     {
         if (document.cookie.length>0)

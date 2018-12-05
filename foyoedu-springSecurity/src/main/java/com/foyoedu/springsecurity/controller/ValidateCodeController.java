@@ -1,13 +1,13 @@
 package com.foyoedu.springsecurity.controller;
 
-import com.foyoedu.springsecurity.configBean.SecurityConstants;
+import com.alibaba.fastjson.JSON;
+import com.foyoedu.springsecurity.config.properties.SecurityConstants;
 import com.foyoedu.springsecurity.dao.LoginValidateDao;
 import com.foyoedu.springsecurity.pojo.FoyoResult;
 import com.foyoedu.springsecurity.pojo.validate.ImageCode;
 import com.foyoedu.springsecurity.pojo.validate.ValidateCode;
 import com.foyoedu.springsecurity.service.SmsCodeSender;
 import com.foyoedu.springsecurity.service.ValidateCodeGenerator;
-import com.foyoedu.springsecurity.utils.FoyoUtils;
 import com.foyoedu.springsecurity.utils.HttpRequest;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -15,17 +15,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -57,6 +50,9 @@ public class ValidateCodeController {
 
     @Autowired
     private LoginValidateDao dao;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     /*@Autowired    通过类名获取spring容器中的对象
 	private Map<String, ValidateCodeGenerator> validateCodeGenerators;*/
@@ -107,13 +103,23 @@ public class ValidateCodeController {
         }
     }
 
-    @GetMapping(value = "/validate/qrtoken/{qrtoken}")
+    @PostMapping(value = "/validate/qrtoken/{qrtoken}")
     public FoyoResult validateQrToken(@PathVariable("qrtoken") String qrtoken, HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean result = dao.findqrlogin(qrtoken);
         if (result) {
-            //UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = dao.findweixin(qrtoken);
-            return FoyoResult.ok(username);
+            String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+            Map<String, String> paramMap = new HashMap<String, String>();
+            paramMap.put("mobile", username);
+            paramMap.put("foyoedu", "foyoedu2018");
+            String sttr = HttpRequest.post(basePath+"/authentication/mobile", paramMap, request);
+            try {
+                JSON.parseObject(sttr, FoyoResult.class);
+            }
+            catch(Exception e){
+                result = false;
+            }
+            //UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }
         return FoyoResult.ok(result);
     }

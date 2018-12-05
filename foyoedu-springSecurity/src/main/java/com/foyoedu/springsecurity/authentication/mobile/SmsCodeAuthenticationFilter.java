@@ -1,6 +1,6 @@
 package com.foyoedu.springsecurity.authentication.mobile;
 
-import com.foyoedu.springsecurity.configBean.SecurityConstants;
+import com.foyoedu.springsecurity.config.properties.SecurityConstants;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

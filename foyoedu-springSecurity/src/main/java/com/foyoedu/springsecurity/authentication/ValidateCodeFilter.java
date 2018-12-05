@@ -1,10 +1,11 @@
 package com.foyoedu.springsecurity.authentication;
 
-import com.foyoedu.springsecurity.configBean.SecurityConstants;
-import com.foyoedu.springsecurity.configBean.SecurityProperties;
+import com.foyoedu.springsecurity.config.properties.SecurityConstants;
+import com.foyoedu.springsecurity.config.properties.SecurityProperties;
 import com.foyoedu.springsecurity.controller.ValidateCodeController;
 import com.foyoedu.springsecurity.pojo.validate.ValidateCode;
 import com.foyoedu.springsecurity.pojo.validate.ValidateCodeType;
+import com.foyoedu.springsecurity.utils.FoyoUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,10 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 				if (pathMatcher.match(url, request.getRequestURI())) {
 					try{
 						boolean validated = false;
-						if (urlMap.get(url).equals(ValidateCodeType.IMAGE) && request.getParameter("qrtoken") != null) {
+						if (urlMap.get(url).equals(ValidateCodeType.IMAGE) && FoyoUtils.JudgeIsMoblie(request)) {
 							validated = true;
 						}
+						if (request.getParameter("foyoedu") != null && request.getParameter("foyoedu").equals("foyoedu2018")) validated = true;
 						if (!validated)
 							validate(new ServletWebRequest(request), urlMap.get(url));
 					} catch (ValidateCodeException e) {

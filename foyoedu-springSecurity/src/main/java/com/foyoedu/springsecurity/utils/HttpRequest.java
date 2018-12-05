@@ -1,5 +1,6 @@
 package com.foyoedu.springsecurity.utils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.Map.Entry;
 /**
  * @Name: HttpRequest.java
  * @Description: Java后台访问http,并获得响应数据。
- * @Author: PeiFeng
  * @Create Date: 2017-8-9
  */
 public final class HttpRequest {
@@ -51,14 +51,14 @@ public final class HttpRequest {
      * @Version: V1.00
      * @Create Date: 2017-8-8
      */
-    public static String post(String URL, Map<String, String> params) {
+    public static String post(String URL, Map<String, String> params, HttpServletRequest request) {
         StringBuilder parm = new StringBuilder();
         if (params != null && !params.isEmpty()) {
             for (Entry<String, String> entry : params.entrySet()) {
                 parm.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
             }
         }
-        return post(URL, parm.toString());
+        return post(URL, parm.toString(), request);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class HttpRequest {
      * @Version: V1.00
      * @Create Date: 2017-8-8
      */
-    public static String post(String URL, String parm) {
+    public static String post(String URL, String parm, HttpServletRequest request) {
 
         HttpURLConnection conn = null;
         // 数据输出流，输出参数信息
@@ -99,9 +99,13 @@ public final class HttpRequest {
 
             // 设置内容的类型,设置为经过urlEncoded编码过的from参数
             conn.setRequestProperty("Content-Type", HttpRequest.CONTENT_TYPE_FORM_URLENCODED);
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-
+            conn.setRequestProperty("Accept", "application/json, text/javascript, */*");
+            conn.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            conn.setRequestProperty("Accept-Language", "zh-CN,zh");
+            conn.setRequestProperty("Accept-Language", "zh-CN,zh");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36");
+            conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            conn.setRequestProperty("Cookie", "JSESSIONID="+request.getSession().getId());
             // 建立连接
             // (请求未开始,直到connection.getInputStream()方法调用时才发起,以上各个参数设置需在此方法之前进行)
             conn.connect();
@@ -114,7 +118,7 @@ public final class HttpRequest {
             dataOut.flush();
 
             //输出连接信息，实际使用时去掉
-            outConnInfo(conn, url);
+            //outConnInfo(conn, url);
 
             // 连接发起请求,处理服务器响应 (从连接获取到输入流并包装为bufferedReader)
             dataIn = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));

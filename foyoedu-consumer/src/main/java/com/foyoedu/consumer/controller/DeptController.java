@@ -6,6 +6,7 @@ import com.foyoedu.common.service.DeptClientService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Map;
@@ -76,7 +77,6 @@ public class DeptController {
     @GetMapping("/hello")
     @ApiOperation("测试HelloWorld")
     public FoyoResult hello() {
-        int i = 1/0;
         return service.hello();
     }
 }

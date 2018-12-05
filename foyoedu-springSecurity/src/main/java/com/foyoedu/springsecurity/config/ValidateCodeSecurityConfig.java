@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.foyoedu.springsecurity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
 
-/**
- * @author zhailiang
- *
- */
 @Component("validateCodeSecurityConfig")
 public class ValidateCodeSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
