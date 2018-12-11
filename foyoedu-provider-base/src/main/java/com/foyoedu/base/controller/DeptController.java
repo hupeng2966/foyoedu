@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 @RestController
 @Accessors(chain=true)
@@ -24,9 +25,19 @@ public class DeptController {
     }
 
     @GetMapping(value = "/dept/get/{id}")
-    public FoyoResult<Dept> getDept(@PathVariable("id") Long id) throws Throwable {
-        String token = FoyoUtils.getToken();
-        return FoyoUtils.ok(deptService.getById(id));
+    public Callable<FoyoResult> getDept(@PathVariable("id") Long id) throws Throwable {
+        Callable<FoyoResult> result = new Callable<FoyoResult>() {
+            @Override
+            public FoyoResult call() throws Exception {
+                String token = FoyoUtils.getToken();
+                try {
+                    return FoyoUtils.ok(deptService.getById(id));
+                } catch (Throwable throwable) {
+                    return FoyoUtils.error(500,throwable.getMessage());
+                }
+            }
+        };
+        return result;
     }
 
     @PostMapping(value = "/dept/list/test")

@@ -33,14 +33,8 @@ public class DeptController {
 
     @GetMapping(value = "/dept/get/{id:\\d+}")
     @ApiOperation("根据部门id获取部门信息")
-    public Callable<FoyoResult> get(@ApiParam(value = "部门id", allowEmptyValue = false) @PathVariable("id") Long id) {
-        Callable<FoyoResult> result = new Callable<FoyoResult>() {
-			@Override
-			public FoyoResult call() throws Exception {
-				return service.getDept(id);
-			}
-		};
-        return result;
+    public FoyoResult get(@ApiParam(value = "部门id", allowEmptyValue = false) @PathVariable("id") Long id) {
+        return service.getDept(id);
     }
 
     //要求前端必须content-type="application/json"

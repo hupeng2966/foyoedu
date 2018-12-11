@@ -8,6 +8,7 @@ import com.foyoedu.common.service.TeacherClientService;
 import com.foyoedu.common.utils.ExcelUtil;
 import com.foyoedu.common.utils.FoyoUtils;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,5 +71,11 @@ public class TeacherController {
         } catch (Exception e) {
             FoyoUtils.outPutResponse(FoyoUtils.error(500,e.getMessage()));
         }
+    }
+
+    @PostMapping("/rabbitsend")
+    @ApiOperation("学生抢课")
+    public FoyoResult rabbitmqSend(@ApiParam(value = "课程id", allowEmptyValue = false) @RequestParam("courseid") Integer courseId){
+        return service.rabbitmqSend(courseId);
     }
 }

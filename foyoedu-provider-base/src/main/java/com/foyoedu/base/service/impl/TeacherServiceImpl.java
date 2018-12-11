@@ -2,34 +2,35 @@ package com.foyoedu.base.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.foyoedu.base.component.DeferredResultHolder;
 import com.foyoedu.base.dao.TeacherDao;
 import com.foyoedu.base.service.TeacherService;
 import com.foyoedu.common.pojo.Teacher;
 import com.foyoedu.common.utils.ExcelUtil;
 import com.foyoedu.common.utils.FoyoUtils;
-import org.apache.poi.ss.formula.functions.T;
+import com.foyoedu.common.utils.RedisLock;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.Executors;
 
 @Service
 public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements TeacherService {
@@ -39,6 +40,20 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
     }
     @Autowired
     private TeacherDao teacherDao;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisLock redisLock;
+
+    @Autowired
+    private DeferredResultHolder deferredResultHolder;
+
+    private static final int TIMEOUT = 10*1000;//超时时间 10s
 
     public List<Teacher> findTeacherData() throws Throwable {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -84,30 +99,75 @@ public class TeacherServiceImpl extends BaseServiceImpl<Teacher> implements Teac
             FoyoUtils.validatePojo(teacher);
             list.add(teacher);
             //获取总列数(空格的不计算)
-            //System.out.println("总列数：" + row.getPhysicalNumberOfCells());
-            //System.out.println("最大列数：" + row.getLastCellNum());
-            //不要用以下for循环写法，因为会不扫描空格列 for (Cell cell : row) { System.out.println(cell);}
-//            for (int i = 0; i < rowCellNum; i++) {
-//                Cell cell = row.getCell(i);
-//                if(cell == null) {
-//                    System.out.print("" + "\t");
-//                    continue;
-//                }
-//                Object obj = ExcelUtil.getValue(cell);
-//                System.out.print(obj + "\t");
-//            }
+            /*System.out.println("总列数：" + row.getPhysicalNumberOfCells());
+            System.out.println("最大列数：" + row.getLastCellNum());
+            不要用以下for循环写法，因为会不扫描空格列 for (Cell cell : row) { System.out.println(cell);}
+            for (int i = 0; i < rowCellNum; i++) {
+                Cell cell = row.getCell(i);
+                if(cell == null) {
+                    System.out.print("" + "\t");
+                    continue;
+                }
+                Object obj = ExcelUtil.getValue(cell);
+                System.out.print(obj + "\t");
+            }*/
         }
         return teacherDao.addTeacherList(list);
     }
 
-    @RabbitListener(queues = "foyo.CourseSelection")
-    public void rabbitListener(Teacher teacher) {
-        System.out.print("消息内容：" + JSON.toJSONString(teacher));
+    @Override
+    public void addUserChoiceCourse(Integer courseId, String orderNumber) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("courseId", courseId);
+        map.put("token", FoyoUtils.getToken());
+        map.put("orderNumber", orderNumber);
+
+        //申请课程订单放入队列之前，检查redis中是否还有库存
+        String course = "COURSE:" + courseId;
+        if (!stringRedisTemplate.hasKey(course)) {
+            int num = teacherDao.findCourseNumById((Integer) map.get("courseId"));
+            stringRedisTemplate.opsForValue().increment(course, num);
+        }
+        if (Integer.parseInt(stringRedisTemplate.opsForValue().get(course)) > 0) {
+            //加锁
+            long time = System.currentTimeMillis() + TIMEOUT;
+            if(!redisLock.lock(courseId.toString(), String.valueOf(time))){
+                deferredResultHolder.getMap().get(orderNumber).setResult(FoyoUtils.error(500,"很抱歉，人太多了，换个姿势再试试~~"));
+                return;
+            }
+            stringRedisTemplate.boundValueOps(course).increment(-1);
+            //解锁
+            redisLock.unlock(courseId.toString(),String.valueOf(time));
+            //课程申请已在排队中
+            rabbitTemplate.convertAndSend("amq.fanout","foyo.CourseSelection", map);
+        }else {
+            //teacherDao.updateCourse(courseId);
+            deferredResultHolder.getMap().get(orderNumber).setResult(FoyoUtils.error(500,"本课程已经被抢光"));
+        }
     }
 
     @RabbitListener(queues = "foyo.CourseSelection")
-    public void rabbitListenerHead(Message message) {
-        System.out.print("消息头信息：" + message.getMessageProperties());
-        System.out.print("消息体内容：" + message.getBody());
+    public void addUserChoiceCourseRabbitListener(Map<String,Object> map, Message message) {
+        /*System.out.println("消息头信息：" + message.getMessageProperties());
+        System.out.println("消息体内容：" + message.getBody());*/
+        if (!deferredResultHolder.getMap().containsKey(map.get("orderNumber"))) return;
+        String json = stringRedisTemplate.opsForValue().get(map.get("token"));
+        if (StringUtils.isEmpty(json)) return;
+        Teacher teacher = (Teacher) JSON.parseObject(json,Teacher.class);
+        String course = "COURSE:" + map.get("courseId");
+        boolean result = false;
+        try {
+            result = teacherDao.addUserChoiceCourse(teacher.getLoginId(), (Integer) map.get("courseId"));
+        }catch (Exception e) {
+            stringRedisTemplate.boundValueOps(course).increment(1);
+            deferredResultHolder.getMap().get(map.get("orderNumber")).setResult(FoyoUtils.error(500,"选课失败"));
+            return;
+        }
+        if (result) {
+            deferredResultHolder.getMap().get(map.get("orderNumber")).setResult(FoyoUtils.ok(result));
+        }else {
+            stringRedisTemplate.boundValueOps(course).increment(1);
+            deferredResultHolder.getMap().get(map.get("orderNumber")).setResult(FoyoUtils.error(500,"选课失败"));
+        }
     }
 }

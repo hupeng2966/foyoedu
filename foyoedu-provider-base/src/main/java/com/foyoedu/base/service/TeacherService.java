@@ -9,4 +9,6 @@ public interface TeacherService extends BaseService<Teacher> {
     public int addTeacherData(MultipartFile file) throws Throwable;
 
     public List<Teacher> findTeacherData() throws Throwable;
+
+    public void addUserChoiceCourse(Integer courseId, String orderNumber);
 }

@@ -4,6 +4,7 @@ import com.foyoedu.common.pojo.Teacher;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -20,13 +21,19 @@ public interface TeacherDao {
             "<script>",
             "insert into teacher(userName, loginId, pwd) values ",
             "<foreach collection='teacherList' item='item' index='index' separator=','>",
-            "(#{item.userName}, #{item.loginId}, #{item.pwd})",
+                "(#{item.userName}, #{item.loginId}, #{item.pwd})",
             "</foreach>",
             "ON DUPLICATE KEY UPDATE userName=values(userName),pwd=values(pwd)",
             "</script>"
     })
     public int addTeacherList(@Param(value="teacherList") List<Teacher> list);
 
+    @Insert("insert into userCourse(loginId,courseId) values(#{loginId},#{courseId})")
+    public boolean addUserChoiceCourse(@Param(value = "loginId") String loginId, @Param(value = "courseId") Integer courseId);
 
+    @Select("select courseNum from course where courseId=#{courseId}")
+    public int findCourseNumById(@Param(value = "courseId") Integer courseId);
 
+    @Update("update course set courseNum=0 where courseId=#{courseId}")
+    public boolean updateCourse(@Param("courseId") Integer courseId);
 }
