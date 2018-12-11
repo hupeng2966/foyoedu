@@ -72,6 +72,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <!--二维码工具类-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>

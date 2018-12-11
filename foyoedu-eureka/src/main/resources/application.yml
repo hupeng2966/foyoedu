@@ -10,7 +10,6 @@ spring:
       name: foyoedu
       password: foyoedu
 eureka:
-  environment: release
   instance:
     hostname: eureka.foyoedu.com #eureka服务端的实例名称
   client:
